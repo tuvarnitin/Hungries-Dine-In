@@ -8,6 +8,7 @@
   --color-primary: #023320;
   --color-red: #7F1100;
   --color-gold: #BF9961;
+  --color-cream: #FaF9F4;
   --color-dark-text: #17211E;
   --color-muted-text: #71837A;
 }
@@ -21,6 +22,7 @@
   --color-white: var(--color-white);
   --color-background: var(--color-background);
   --color-primary: var(--color-primary);
+  --color-cream: var(--color-cream);
   --color-red: var(--color-red);
   --color-gold: var(--color-gold);
   --color-dark-text: var(--color-dark-text);
@@ -37,5 +39,14 @@
 body {
   background: var(--color-background);
   color: var(--color-dark-text);
-  font-family: Helvetica, sans-serif;
+}
+
+input[type="radio"]{
+  all: unset;
+}
+
+@media (max-width:500px) {
+  body::-webkit-scrollbar{
+    display: none;
+  }
 }
