@@ -1,5 +1,6 @@
 import { Clock3, Heart, ShoppingCart, Star, Leaf } from "lucide-react";
-import type { FoodType } from "@/types";
+import type { FoodType } from "@/types/food";
+import Button from "@/components/Button"
 
 interface FoodCardProps {
 	food: FoodType;
@@ -7,12 +8,14 @@ interface FoodCardProps {
 }
 
 export default function FoodCard({ food, onAddToCart }: FoodCardProps) {
-	const isVeg = food.tags.includes("veg") || food.tags.includes("Veg"); 
+	const isVeg = food.tags.includes("veg") || food.tags.includes("Veg");
+
+	const addToCart = () => {}
 
 	return (
 		<article className="group relative flex gap-4 w-full overflow-hidden rounded-[28px] bg-cream p-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(0,0,0,0.1) items-center relative rounded-tr-md">
 			<div className="h-8 w-8 bg-white shadow-sm absolute top-0 right-0 flex items-center justify-center rounded-bl-xl">
-				<Heart size={13}/>
+				<Heart size={13} />
 			</div>
 			{/* Image */}
 			<div className="relative h-[clamp(130px,18vw,180px)] w-[clamp(130px,18vw,180px)] shrink-0 overflow-hidden rounded-[22px]">
@@ -72,14 +75,14 @@ export default function FoodCard({ food, onAddToCart }: FoodCardProps) {
 					<span className="font-(family-name:--font-playfair) text-2xl font-bold text-primary">
 						${food.price}
 					</span>
-					<button
+					<Button
 						type="button"
 						onClick={() => onAddToCart?.(food)}
-						className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#043c2b] active:scale-95"
+						icon={<ShoppingCart size={14} />}
+						size="sm"
 					>
-						<ShoppingCart size={14} />
-						<span className="text-[clamp(12px,1.2vw,13px)] text-nowrap">Add to Cart</span>
-					</button>
+						Add to Cart
+					</Button>
 				</div>
 			</div>
 		</article>

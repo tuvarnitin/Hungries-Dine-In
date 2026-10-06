@@ -1,5 +1,5 @@
 import React, { Dispatch } from "react";
-import { FILTERS } from "../data/filter";
+import { FILTERS } from "@/data/filter";
 
 const Filters = ({
 	setSelectedFilter,
@@ -18,7 +18,7 @@ const Filters = ({
 		};
 		return (
 			<label
-				className={`flex items-center gap-1 rounded-full px-1 pt-1.5 py-1 pr-3 hover:opacity-90 ${selectedFilter === value ? "bg-primary text-white" : "text-muted-text/60 bg-[#faf9f4] border border-[#e9e8e4]"}`}
+				className={`flex items-center gap-1 rounded-full py-1.5 px-2 sm:px-2 sm:py-1.5 pr-3 sm:pr-3 hover:opacity-90 ${selectedFilter === value ? "bg-primary text-white" : "text-primary bg-[#faf9f4] border border-primary"}`}
 				htmlFor={value}
 			>
 				<input

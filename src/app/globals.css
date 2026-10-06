@@ -39,6 +39,7 @@
 body {
   background: var(--color-background);
   color: var(--color-dark-text);
+  font-family: var(--font-inter);
 }
 
 input[type="radio"]{

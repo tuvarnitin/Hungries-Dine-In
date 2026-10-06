@@ -1,5 +1,5 @@
-import FoodCard from "./FoodCard";
-import { FoodPropsType } from "@/types";
+import FoodCard from "@/components/home/FoodCard";
+import { FoodPropsType } from "@/types/food";
 
 const FoodList = ({
 	title,
@@ -16,7 +16,10 @@ const FoodList = ({
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 				{foods.map((food) => (
-					<FoodCard key={food.id} food={food} />
+					<FoodCard
+						key={food.id}
+						food={food}
+					/>
 				))}
 			</div>
 		</>

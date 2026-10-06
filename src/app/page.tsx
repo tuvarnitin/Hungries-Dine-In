@@ -1,12 +1,12 @@
 "use client";
-import Navbar from "./components/Navbar";
-import SearchBar from "./components/SearchBar";
-import HomeBanner from "./components/HomeBanner";
 import { useState } from "react";
-import Filters from "./components/Filters";
-import FoodList from "./components/FoodList";
-import { FOODS } from "./data/food";
-import NoResults from "./components/NoResults";
+import Navbar from "@/components/Navbar";
+import SearchBar from "@/components/home/SearchBar";
+import HomeBanner from "@/components/home/HomeBanner";
+import Filters from "@/components/home/Filters";
+import FoodList from "@/components/home/FoodList";
+import { FOODS } from "@/data/food";
+import NoResults from "@/components/home/NoResults";
 
 export default function Home() {
 	const [selectedFilter, setSelectedFilter] = useState("All");
@@ -15,7 +15,7 @@ export default function Home() {
 		selectedFilter === "All"
 			? FOODS
 			: FOODS.filter((food) =>
-					food.tags.some((tag) =>
+					food.tags.some((tag: string) =>
 						tag.toLowerCase().includes(selectedFilter.toLowerCase()),
 					),
 				);

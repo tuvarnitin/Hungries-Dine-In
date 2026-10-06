@@ -39,7 +39,7 @@ export default function NoResults({
 			</div>
 
 			{/* Heading */}
-			<h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold tracking-tight text-[#17211e]">
+			<h2 className="font-(family-name:--font-playfair) text-3xl font-bold tracking-tight text-[#17211e]">
 				{title}
 			</h2>
 

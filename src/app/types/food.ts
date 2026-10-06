@@ -1,4 +1,6 @@
-export type FoodType = {
+import { AddOnsType } from "./cart";
+
+export interface FoodType {
 	id: string;
 	img: string;
 	tags: string[];
@@ -6,9 +8,11 @@ export type FoodType = {
 	rating: number;
 	estTime: string;
 	price: number;
+	desc?:string;
+	addons:AddOnsType[];
 };
 
-export type FoodPropsType = {
+export interface FoodPropsType {
 	id: string;
 	img: string;
 	tags: string[];
@@ -16,4 +20,5 @@ export type FoodPropsType = {
 	rating: number;
 	estTime: string;
 	price: number;
+	addons:AddOnsType[]
 };
