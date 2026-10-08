@@ -21,17 +21,6 @@ export default function OrderPricing({
 					</span>
 				</div>
 
-				<div className="flex justify-between items-center text-neutral-600 font-medium">
-					<span className="flex items-center space-x-1">
-						<span>Dine-in Service & Tech (3%)</span>
-						<Info className="w-3.5 h-3.5 text-neutral-400" />
-					</span>
-
-					<span className="text-dark-text font-semibold">
-						${serviceFee.toFixed(2)}
-					</span>
-				</div>
-
 				<div className="flex justify-between text-neutral-600 font-medium">
 					<span>Estimated Tax (8.25%)</span>
 

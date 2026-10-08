@@ -1,14 +1,14 @@
 import Button from "@/components/Button";
-import { ActiveCartData } from "@/types/cart";
+import { ActiveOrderType } from "@/types/cart";
 
 type Props = {
-	table: ActiveCartData;
+	activeOrder: ActiveOrderType;
 	onViewCart: () => void;
 	onCallWaiter: () => void;
 };
 
 export default function ActiveOrderCard({
-	table,
+	activeOrder,
 	onViewCart,
 	onCallWaiter,
 }: Props) {
@@ -17,41 +17,41 @@ export default function ActiveOrderCard({
 			<div className="flex items-center justify-between pb-3 border-b border-muted-text/10">
 				<div className="flex items-center space-x-2">
 					<span className="font-bold text-dark-text text-sm">
-						{table.tableNumber}
+						{activeOrder.tableNumber}
 					</span>
-					<span className="text-muted-text text-xs">• {table.branch}</span>
+					<span className="text-muted-text text-xs">• {activeOrder.branch}</span>
 				</div>
 
 				<span className="inline-flex items-center text-primary font-semibold bg-primary/10 px-2.5 py-1 rounded-full text-xs">
 					<span className="w-1.5 h-1.5 bg-primary rounded-full mr-1 animate-pulse" />
-					{table.activeCount} Active Items
+					{activeOrder.activeCount} Active Items
 				</span>
 			</div>
 
-			{table.items.map((item) => (
+			{activeOrder.items.map((cart) => (
 				<div
-					key={item.id}
+					key={cart.item.id}
 					className="flex items-center justify-between py-2 border-b border-muted-text/10 last:border-0"
 				>
 					<div className="flex items-center space-x-3 min-w-0">
 						<img
-							src={item.img}
-							alt={item.name}
+							src={cart.item.img}
+							alt={cart.item.name}
 							className="w-12 h-12 rounded-xl object-cover shadow-xs shrink-0"
 						/>
 
 						<div className="min-w-0">
 							<h4 className="font-bold text-dark-text text-sm truncate">
-								{item.name}
+								{cart.item.name}
 							</h4>
 
-							<p className="text-xs text-muted-text truncate">{item.desc}</p>
+							<p className="text-xs text-muted-text truncate">{cart.item.desc}</p>
 						</div>
 					</div>
 
 					<div className="flex items-end font-semibold h-max gap-1 shrink-0 ml-3 text-dark-text">
 						<span className="text-xs leading-0">X</span>
-						<span className="text-xl leading-1">{item.quantity}</span>
+						<span className="text-xl leading-1">{cart.quantity}</span>
 					</div>
 				</div>
 			))}
@@ -62,7 +62,7 @@ export default function ActiveOrderCard({
 				</span>
 
 				<span className="font-extrabold text-red text-base">
-					${table.subtotal.toFixed(2)}
+					${activeOrder.subtotal.toFixed(2)}
 				</span>
 			</div>
 

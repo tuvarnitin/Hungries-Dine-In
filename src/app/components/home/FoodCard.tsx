@@ -1,16 +1,30 @@
-import { Clock3, Heart, ShoppingCart, Star, Leaf } from "lucide-react";
+import {
+	Clock3,
+	Heart,
+	ShoppingCart,
+	Star,
+	Leaf,
+	Minus,
+	Plus,
+} from "lucide-react";
 import type { FoodType } from "@/types/food";
-import Button from "@/components/Button"
+import Button from "@/components/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, updateQuantity } from "@/store/features/cart/cartSlice";
+import { RootState } from "@/store/store";
+import QuantityControl from "../cart/QuantityControl";
 
 interface FoodCardProps {
 	food: FoodType;
 	onAddToCart?: (food: FoodType) => void;
 }
 
-export default function FoodCard({ food, onAddToCart }: FoodCardProps) {
+export default function FoodCard({ food }: FoodCardProps) {
 	const isVeg = food.tags.includes("veg") || food.tags.includes("Veg");
 
-	const addToCart = () => {}
+	const dispatch = useDispatch();
+	const cart = useSelector((state: RootState) => state.cart.items);
+	const cartItem = cart?.find((item) => item.id === food.id);
 
 	return (
 		<article className="group relative flex gap-4 w-full overflow-hidden rounded-[28px] bg-cream p-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(0,0,0,0.1) items-center relative rounded-tr-md">
@@ -43,8 +57,7 @@ export default function FoodCard({ food, onAddToCart }: FoodCardProps) {
 
 				{/* Description */}
 				<p className="mt-1.5 line-clamp-2 max-w-2xl text-[11px] leading-4 text-muted-text">
-					Crispy tofu, fresh vegetables and delicious flavors combined with a
-					crunchy coating.
+					{food.desc}
 				</p>
 
 				{/* Rating + Time */}
@@ -64,7 +77,6 @@ export default function FoodCard({ food, onAddToCart }: FoodCardProps) {
 						<Clock3 size={17} />
 						<span className="text-[12px] text-nowrap">{food.estTime} min</span>
 					</div>
-					{/* <div className="h-5 w-px bg-gray-400" /> */}
 				</div>
 
 				{/* Bottom */}
@@ -75,14 +87,59 @@ export default function FoodCard({ food, onAddToCart }: FoodCardProps) {
 					<span className="font-(family-name:--font-playfair) text-2xl font-bold text-primary">
 						${food.price}
 					</span>
-					<Button
-						type="button"
-						onClick={() => onAddToCart?.(food)}
-						icon={<ShoppingCart size={14} />}
-						size="sm"
-					>
-						Add to Cart
-					</Button>
+					{cartItem && cartItem.quantity > 0 ? (
+						<div className="flex items-center space-x-3 bg-white border border-muted-text/10 rounded-full px-1.5 py-0.5 shadow-xs">
+							<button
+								type="button"
+								onClick={() =>
+									dispatch(updateQuantity({ id: food.id, value: -1 }))
+								}
+								className="text-neutral-600 hover:text-neutral-900 transition-colors p-0.5"
+								aria-label="Decrease quantity"
+							>
+								<Minus
+									size={17}
+									strokeWidth={3.5}
+								/>
+							</button>
+
+							<span className="text-lg font-(family-name:--font-playfair) font-bold leading-1 w-3 text-center mb-1.5">
+								{cartItem.quantity}
+							</span>
+
+							<Button
+								onClick={() =>
+									dispatch(updateQuantity({ id: food.id, value: 1 }))
+								}
+								size="xs"
+								aria-label="Increase quantity"
+							>
+								<Plus size={16} />
+							</Button>
+						</div>
+					) : (
+						<div className="bg-primary px-3 py-1.5 rounded-full">
+							<button
+								onClick={() =>
+									dispatch(
+										addToCart({
+											id: food.id,
+											img: food.img,
+											tags: food.tags,
+											name: food.name,
+											price: food.price,
+											quantity: 1,
+											desc:food.desc
+										}),
+									)
+								}
+								className="rounded-full font-semibold flex items-center justify-center gap-2 transition-all duration-200 text-white disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98]"
+							>
+								<ShoppingCart size={14} />
+								<span className="text-xs font-normal">Add to Cart</span>
+							</button>
+						</div>
+					)}
 				</div>
 			</div>
 		</article>

@@ -1,12 +1,12 @@
 import FoodCard from "@/components/home/FoodCard";
-import { FoodPropsType } from "@/types/food";
+import { FoodType } from "@/types/food";
 
 const FoodList = ({
 	title,
 	foods,
 }: {
 	title: string;
-	foods: FoodPropsType[];
+	foods: FoodType[];
 }) => {
 	return (
 		<>

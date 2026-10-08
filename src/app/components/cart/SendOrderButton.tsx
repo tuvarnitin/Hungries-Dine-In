@@ -2,7 +2,7 @@ import { Send } from "lucide-react";
 import Button from "@/components/Button";
 
 interface SendOrderButtonProps {
-	totalDue: number;
+	totalDue: string;
 	onClick?: () => void;
 	loading?: boolean;
 }
@@ -23,7 +23,7 @@ export default function SendOrderButton({
 			>
 				{loading
 					? "Sending Order..."
-					: `Send Order to Kitchen • $${totalDue.toFixed(2)}`}
+					: `Send Order to Kitchen • $${totalDue}`}
 			</Button>
 		</div>
 	);

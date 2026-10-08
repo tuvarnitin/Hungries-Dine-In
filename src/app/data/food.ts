@@ -9,11 +9,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.5,
 		estTime: "20-25",
 		price: 12.8,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "104",
@@ -23,11 +19,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.8,
 		estTime: "20-25",
 		price: 13.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "129",
@@ -37,11 +29,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.6,
 		estTime: "20-25",
 		price: 11.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "108",
@@ -51,11 +39,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.8,
 		estTime: "5-10",
 		price: 5.2,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "125",
@@ -65,11 +49,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.9,
 		estTime: "25-30",
 		price: 14.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "111",
@@ -79,11 +59,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.7,
 		estTime: "5-10",
 		price: 6.2,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "102",
@@ -93,11 +69,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.5,
 		estTime: "15-20",
 		price: 9.8,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "120",
@@ -107,11 +79,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.8,
 		estTime: "10-15",
 		price: 11.0,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "113",
@@ -121,11 +89,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.8,
 		estTime: "20-25",
 		price: 14.2,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "106",
@@ -135,11 +99,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.7,
 		estTime: "20-25",
 		price: 14.8,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "121",
@@ -149,11 +109,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.4,
 		estTime: "10-15",
 		price: 8.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "128",
@@ -163,11 +119,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.8,
 		estTime: "25-30",
 		price: 13.9,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "107",
@@ -177,11 +129,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.6,
 		estTime: "5-10",
 		price: 4.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "123",
@@ -191,11 +139,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.7,
 		estTime: "15-20",
 		price: 9.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "115",
@@ -205,11 +149,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.4,
 		estTime: "15-20",
 		price: 12.0,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "110",
@@ -219,11 +159,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.3,
 		estTime: "5-10",
 		price: 5.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "126",
@@ -233,11 +169,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.8,
 		estTime: "20-25",
 		price: 11.9,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "103",
@@ -247,11 +179,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.6,
 		estTime: "15-20",
 		price: 11.2,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "118",
@@ -261,11 +189,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.7,
 		estTime: "15-20",
 		price: 13.2,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "130",
@@ -275,11 +199,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.9,
 		estTime: "25-30",
 		price: 14.9,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "109",
@@ -289,11 +209,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.4,
 		estTime: "5-10",
 		price: 3.9,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "124",
@@ -303,11 +219,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.5,
 		estTime: "10-15",
 		price: 8.8,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "114",
@@ -317,11 +229,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.9,
 		estTime: "25-30",
 		price: 16.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "119",
@@ -331,11 +239,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.5,
 		estTime: "10-15",
 		price: 9.9,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "101",
@@ -345,11 +249,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.7,
 		estTime: "15-20",
 		price: 10.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "127",
@@ -359,11 +259,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.7,
 		estTime: "15-20",
 		price: 10.2,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "112",
@@ -373,11 +269,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.5,
 		estTime: "5-10",
 		price: 4.8,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "122",
@@ -387,11 +279,7 @@ export const FOODS: FoodType[] = [
 		rating: 4.6,
 		estTime: "15-20",
 		price: 10.9,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 	{
 		id: "116",
@@ -401,10 +289,6 @@ export const FOODS: FoodType[] = [
 		rating: 4.6,
 		estTime: "15-20",
 		price: 11.5,
-		addons: [
-			{ id: "a1", name: "Extra Truffle Aioli", checked: false },
-			{ id: "a2", name: "Extra Crispy Bacon", checked: false },
-			{ id: "a3", name: "Cheddar Cheese Slice", checked: false },
-		],
+		desc:"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
 	},
 ];

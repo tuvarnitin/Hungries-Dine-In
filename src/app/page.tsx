@@ -43,7 +43,7 @@ export default function Home() {
 							foods={filteredFoods}
 						/>
 
-						<FoodList
+						{/* <FoodList
 							title="Chef's Picks"
 							foods={filteredFoods}
 						/>
@@ -61,7 +61,7 @@ export default function Home() {
 						<FoodList
 							title="Something Sweet"
 							foods={filteredFoods}
-						/>
+						/> */}
 					</>
 				) : (
 					<NoResults />

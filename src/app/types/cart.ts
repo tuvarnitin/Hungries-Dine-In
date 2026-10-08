@@ -1,30 +1,30 @@
+import { FoodType } from "./food";
+
 export interface CartItemProps {
-	item: CartItem;
+	cartItem: ICartItem;
 	onRemove: (id: string) => void;
 	onIncrease: (id: string) => void;
 	onDecrease: (id: string) => void;
 }
 
-export interface AddonOption {
+export interface ICartItem {
 	id: string;
+	img: string;
+	tags: string[];
 	name: string;
-	price?: number;
-	checked: boolean;
-}
-
-export interface CartItem {
-	id: string;
-	name: string;
-	desc: string;
 	price: number;
 	quantity: number;
-	img: string;
-	addonsOpen?: boolean;
-	addons?: AddonOption[];
+	desc:string
+}
+
+export interface CartItemType {
+	id: string;
+	item: FoodType;
+	quantity: number;
 }
 
 export interface CartItemListProps {
-	items: CartItem[];
+	cart: CartItemType[];
 	onRemove: (id: string) => void;
 	onIncrease: (id: string) => void;
 	onDecrease: (id: string) => void;
@@ -36,10 +36,10 @@ export interface AddOnsType {
 	checked: boolean;
 }
 
-export type ActiveCartData = {
+export type ActiveOrderType = {
 	tableNumber: string;
 	branch: string;
 	activeCount: number;
 	subtotal: number;
-	items: CartItem[];
+	items: CartItemType[];
 };

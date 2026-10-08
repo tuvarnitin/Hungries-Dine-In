@@ -79,7 +79,7 @@ export default function OrdersPage() {
 			/>
 
 			<OrdersHeader
-				table={activeCartData}
+				activeOrder={activeCartData}
 				onBack={() => router.back()}
 				onClear={() => showToast("Trash cleared successfully")}
 			/>
@@ -92,7 +92,7 @@ export default function OrdersPage() {
 			<main className="w-full max-w-md space-y-4">
 				{activeTab === "active" ? (
 					<ActiveOrders
-						table={activeCartData}
+						activeOrder={activeCartData}
 						onViewCart={() => router.push("/cart")}
 						onCallWaiter={() => setIsCallWaiterOpen(true)}
 						onAddDishes={() => router.push("/")}

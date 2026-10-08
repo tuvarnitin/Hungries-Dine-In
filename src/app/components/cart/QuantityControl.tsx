@@ -1,10 +1,11 @@
 import { Minus, Plus } from "lucide-react";
 import Button from "@/components/Button";
+import { DispatchState } from "@/store/store";
 
 interface QuantityControlProps {
 	quantity: number;
-	onDecrease: () => void;
-	onIncrease: () => void;
+	onDecrease: ()=> void;
+	onIncrease: ()=> void;
 }
 
 export default function QuantityControl({
@@ -15,7 +16,6 @@ export default function QuantityControl({
 	return (
 		<div className="flex items-end justify-between">
 			<span className="text-xs font-medium text-muted-text">Quantity</span>
-
 			<div className="flex items-center space-x-3 bg-white border border-muted-text/10 rounded-full px-1.5 py-1 shadow-xs">
 				<button
 					type="button"

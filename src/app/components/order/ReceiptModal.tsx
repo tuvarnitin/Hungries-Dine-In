@@ -60,7 +60,9 @@ export default function ReceiptModal({
 				<div className="pt-2 border-t border-muted-text/15 flex justify-between items-center">
 					<span className="font-bold text-dark-text">Total Paid</span>
 
-					<span className="font-extrabold text-xl text-red">{order.total}</span>
+					<span className="font-extrabold text-xl text-red font-(family-name:--font-playfair)">
+						{order.total}
+					</span>
 				</div>
 
 				<Button
