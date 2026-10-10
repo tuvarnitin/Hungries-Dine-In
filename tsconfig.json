@@ -19,7 +19,13 @@
 			}
 		],
 		"paths": {
-			"@/*": ["./src/app/*"]
+			"@/*": ["./app/*"],
+			"@/components/*": ["./components/*"],
+			"@/data/*": ["./data/*"],
+			"@/lib/*": ["./lib/*"],
+			"@/models/*": ["./models/*"],
+			"@/store/*": ["./store/*"],
+			"@/types/*": ["./types/*"],
 		}
 	},
 	"include": [
@@ -29,6 +35,6 @@
 		".next/types/**/*.ts",
 		".next/dev/types/**/*.ts",
 		"**/*.mts"
-	],
+, "components/TableExpiryCheck.tsx"	],
 	"exclude": ["node_modules"]
 }

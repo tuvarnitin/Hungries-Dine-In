@@ -1,0 +1,265 @@
+import { FoodType } from "@/types/food";
+
+export const FOODS: FoodType[] = [
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Crispy_Tofu_Panko_Rol_20261005122209.jpg",
+		"tags": ["Sushi", "Crunchy"],
+		"name": "Crispy Tofu Panko Roll",
+		"rating": 4.5,
+		"estPreparationTime": "20-25",
+		"price": 12.8,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Margherita_pizza_for_menu_card_20261005122118.jpg",
+		"tags": ["Veg", "Pizza", "Best Seller"],
+		"name": "Classic Margherita Basil Pizza",
+		"rating": 4.8,
+		"estPreparationTime": "20-25",
+		"price": 13.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Spicy_Chili_Garlic_Hakka_Noodles_20261005122300.jpg",
+		"tags": ["Veg", "Noodles", "Spicy"],
+		"name": "Spicy Chili Garlic Hakka Noodles",
+		"rating": 4.6,
+		"estPreparationTime": "20-25",
+		"price": 11.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Chocolate_walnut_brownie_menu_image_20261005122133.jpg",
+		"tags": ["Veg", "Bakery", "Sweet"],
+		"name": "Fudgy Chocolate Walnut Brownie",
+		"rating": 4.8,
+		"estPreparationTime": "5-10",
+		"price": 5.2,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Paneer_Butter_Masala_with_Naan_20261005122239.jpg",
+		"tags": ["Veg", "Indian", "Premium"],
+		"name": "Paneer Butter Masala with Naan",
+		"rating": 4.9,
+		"estPreparationTime": "25-30",
+		"price": 14.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Iced_matcha_latte_menu_image_20261005122145.jpg",
+		"tags": ["Veg", "Drinks", "Cold"],
+		"name": "Iced Matcha Oat Milk Latte",
+		"rating": 4.7,
+		"estPreparationTime": "5-10",
+		"price": 6.2,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Spiced_Black_Bean_Avocado_Burger_20261005122109.jpg",
+		"tags": ["Veg", "Burger", "Healthy"],
+		"name": "Spiced Black Bean Avocado Burger",
+		"rating": 4.5,
+		"estPreparationTime": "15-20",
+		"price": 9.8,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Mediterranean_falafel_bowl_menu___20261005122221.jpg",
+		"tags": ["Veg", "Bowls", "Healthy"],
+		"name": "Mediterranean Falafel Bowl",
+		"rating": 4.8,
+		"estPreparationTime": "10-15",
+		"price": 11.0,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Creamy_wild_mushroom_fettuccine___20261005122153.jpg",
+		"tags": ["Veg", "Pasta"],
+		"name": "Creamy Wild Mushroom Fettuccine",
+		"rating": 4.8,
+		"estPreparationTime": "20-25",
+		"price": 14.2,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Garden_Supreme_Paneer_Pizza_20261005122127.jpg",
+		"tags": ["Veg", "Pizza", "Spicy"],
+		"name": "Garden Supreme Paneer Pizza",
+		"rating": 4.7,
+		"estPreparationTime": "20-25",
+		"price": 14.8,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Greek_Feta_Salad_menu_image_20261005122224.jpg",
+		"tags": ["Veg", "Salads", "Fresh"],
+		"name": "Classic Greek Feta Salad",
+		"rating": 4.4,
+		"estPreparationTime": "10-15",
+		"price": 8.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Miso_tofu_vegetable_ramen_20261005122254.jpg",
+		"tags": ["Veg", "Ramen", "Hot"],
+		"name": "Miso Tofu Vegetable Ramen",
+		"rating": 4.8,
+		"estPreparationTime": "25-30",
+		"price": 13.9,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Almond_croissant_for_menu_card_20261005122131.jpg",
+		"tags": ["Veg", "Bakery", "Sweet"],
+		"name": "Almond Croissant",
+		"rating": 4.6,
+		"estPreparationTime": "5-10",
+		"price": 4.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Three-Bean_Loaded_Nachos_Menu_Image_20261005122232.jpg",
+		"tags": ["Veg", "Mexican", "Spicy"],
+		"name": "Three-Bean Loaded Nachos",
+		"rating": 4.7,
+		"estPreparationTime": "15-20",
+		"price": 9.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Penne_Arrabbiata_with_Olives_20261005122159.jpg",
+		"tags": ["Veg", "Pasta", "Spicy"],
+		"name": "Penne Arrabbiata with Olives",
+		"rating": 4.4,
+		"estPreparationTime": "15-20",
+		"price": 12.0,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Tropical_mango_smoothie_for_menu_20261005122142.jpg",
+		"tags": ["Veg", "Drinks", "Cold"],
+		"name": "Tropical Mango Smoothie",
+		"rating": 4.3,
+		"estPreparationTime": "5-10",
+		"price": 5.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Dal_Makhani_Rice_Bowl_menu_20261005122242.jpg",
+		"tags": ["Veg", "Indian"],
+		"name": "Dal Makhani Rice Bowl",
+		"rating": 4.8,
+		"estPreparationTime": "20-25",
+		"price": 11.9,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Fiery_Jalape%C3%B1o_Crunch_Burger_20261005122114.jpg",
+		"tags": ["Veg", "Burger", "Spicy"],
+		"name": "Fiery Jalapeño Crunch Burger",
+		"rating": 4.6,
+		"estPreparationTime": "15-20",
+		"price": 11.2,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Spicy_mango_asparagus_maki_20261005122213.jpg",
+		"tags": ["Veg", "Sushi"],
+		"name": "Spicy Mango Asparagus Maki",
+		"rating": 4.7,
+		"estPreparationTime": "15-20",
+		"price": 13.2,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Vegetarian_ramen_for_menu_card_20261005122328.jpg",
+		"tags": ["Veg", "Ramen", "Hot"],
+		"name": "Creamy Vegetarian Tonkotsu Ramen",
+		"rating": 4.9,
+		"estPreparationTime": "25-30",
+		"price": 14.9,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Blueberry_streusel_muffin_menu_i__20261005122138.jpg",
+		"tags": ["Veg", "Bakery", "Breakfast"],
+		"name": "Blueberry Streusel Muffin",
+		"rating": 4.4,
+		"estPreparationTime": "5-10",
+		"price": 3.9,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Grilled_corn_black_bean_tacos_20261005122236.jpg",
+		"tags": ["Veg", "Mexican"],
+		"name": "Grilled Corn & Black Bean Tacos",
+		"rating": 4.5,
+		"estPreparationTime": "10-15",
+		"price": 8.8,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Four-Cheese_Spinach_Lasagna_menu__20261005123722.jpg",
+		"tags": ["Veg", "Pasta"],
+		"name": "Four-Cheese Spinach Lasagna",
+		"rating": 4.9,
+		"estPreparationTime": "25-30",
+		"price": 16.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Avocado_quinoa_bowl_for_menu_20261005122218.jpg",
+		"tags": ["Veg", "Bowls", "Healthy"],
+		"name": "Avocado Quinoa Bowl",
+		"rating": 4.5,
+		"estPreparationTime": "10-15",
+		"price": 9.9,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Crispy_Paneer_Smash_Burger_20261005122103.jpg",
+		"tags": ["Veg", "Burger"],
+		"name": "Crispy Paneer Smash Burger",
+		"rating": 4.7,
+		"estPreparationTime": "15-20",
+		"price": 10.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Amritsari_chole_bhature_food_menu_20261005122245.jpg",
+		"tags": ["Veg", "Indian", "Spicy"],
+		"name": "Amritsari Chole Bhature",
+		"rating": 4.7,
+		"estPreparationTime": "15-20",
+		"price": 10.2,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Fresh_mint_lime_mojito_20261005122150.jpg",
+		"tags": ["Veg", "Drinks", "Refreshing"],
+		"name": "Fresh Mint Lime Mojito",
+		"rating": 4.5,
+		"estPreparationTime": "5-10",
+		"price": 4.8,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Loaded_veggie_quesadilla_menu_image_20261005122229.jpg",
+		"tags": ["Veg", "Mexican"],
+		"name": "Loaded Veggie Quesadilla",
+		"rating": 4.6,
+		"estPreparationTime": "15-20",
+		"price": 10.9,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+	{
+		"img": "https://ik.imagekit.io/nitintuvar/table/Avocado_cucumber_roll_food_menu_20261005122206.jpg",
+		"tags": ["Veg", "Sushi", "Fresh"],
+		"name": "Avocado Cucumber Roll",
+		"rating": 4.6,
+		"estPreparationTime": "15-20",
+		"price": 11.5,
+		"desc":"Crispy tofu, fresh vegetables and delicious flavors combined with a crunchy coating."
+	},
+];
