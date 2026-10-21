@@ -5,7 +5,7 @@ export type OrderHistory = {
 	date: string;
 	total: string;
 	rating: number;
-	items: ICartItem[];
+	items: string[];
 };
 
 export interface OrderPricingProps {
