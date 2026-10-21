@@ -60,7 +60,7 @@ const FoodList = ({
 
 	return (
 		<>
-			<div className="-mt-2">
+			<div className="pb-20 -mt-2">
 				{foods && foods.length > 0 && (
 					<>
 						<div className="flex justify-between pt-6 pb-3">
