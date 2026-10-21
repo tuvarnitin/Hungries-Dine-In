@@ -35,9 +35,9 @@ export default function OrderHistoryCard({
 							{order.date} • {order.id}
 						</span>
 
-						<h4 className="font-bold text-[#2C221E] text-sm">
+						{/* <h4 className="font-bold text-[#2C221E] text-sm">
 							{order.restaurant}
-						</h4>
+						</h4> */}
 
 						<p className="text-xs text-[#7A7067] mt-0.5 line-clamp-1">
 							{order.items.join(", ")}

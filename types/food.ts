@@ -7,4 +7,5 @@ export interface FoodType {
 	estPreparationTime: string;
 	price: number;
 	desc: string;
+	category:string
 };

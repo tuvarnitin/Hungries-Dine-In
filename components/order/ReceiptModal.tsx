@@ -40,9 +40,9 @@ export default function ReceiptModal({
 					</button>
 				</div>
 
-				<p className="text-xs font-semibold text-muted-text uppercase">
+				{/* <p className="text-xs font-semibold text-muted-text uppercase">
 					Location: {order.restaurant}
-				</p>
+				</p> */}
 
 				<div className="bg-white p-3 rounded-xl border border-muted-text/15 space-y-2">
 					{order.items.map((item, index) => (
@@ -50,7 +50,7 @@ export default function ReceiptModal({
 							key={`${order.id}-${index}`}
 							className="flex justify-between text-sm text-dark-text"
 						>
-							<span>{item}</span>
+							<span>{item.name}</span>
 
 							<span className="font-medium text-primary">✓</span>
 						</div>

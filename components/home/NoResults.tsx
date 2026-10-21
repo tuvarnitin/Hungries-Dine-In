@@ -9,7 +9,7 @@ interface NoResultsProps {
 
 export default function NoResults({
 	query,
-	title = "Nothing taste found",
+	title = "Nothing tasty found",
 	description = "We couldn't find anything matching your search. Try a different dish or category.",
 }: NoResultsProps) {
 	return (

@@ -9,6 +9,7 @@ export interface IFood extends Document {
 	price: number;
 	desc: string;
 	isAvailable: boolean;
+	category?:string;
 }
 
 const foodSchema = new Schema<IFood>({
@@ -21,6 +22,10 @@ const foodSchema = new Schema<IFood>({
 		type: String,
 		required: true,
 		minLength: 1,
+	},
+	category:{
+		type: String,
+		default: ""
 	},
 	tags: [String],
 	rating: {

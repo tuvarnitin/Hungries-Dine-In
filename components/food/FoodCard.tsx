@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, updateQuantity } from "@/store/features/cart/cartSlice";
 import { RootState } from "@/store/store";
 import { useState } from "react";
+import FoodImage from "./FoodImage";
 
 interface FoodCardProps {
 	food: FoodType;
@@ -49,21 +50,7 @@ export default function FoodCard({ food }: FoodCardProps) {
 				)}
 			</div>
 			{/* Image */}
-			<div className="relative h-[clamp(130px,18vw,180px)] w-[clamp(130px,18vw,180px)] shrink-0 overflow-hidden rounded-[22px]">
-				<img
-					src={food.img}
-					alt={food.name}
-					className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-				/>
-
-				{/* Veg badge */}
-				{isVeg && (
-					<div className="absolute left-3 top-3 rounded-full bg-primary/90 px-2 py-1 text-xs font-medium text-white shadow-sm flex gap-1 items-center">
-						<Leaf size={10} />
-						<span className="text-[clamp(12px,2vw,14px)]">Veg</span>
-					</div>
-				)}
-			</div>
+			<FoodImage food={food} isVeg={isVeg} />
 
 			{/* Content */}
 			<div className="flex min-w-0 flex-1 flex-col ">
@@ -147,6 +134,7 @@ export default function FoodCard({ food }: FoodCardProps) {
 											price: food.price,
 											quantity: 1,
 											desc: food.desc,
+											category: food.category
 										}),
 									)
 								}

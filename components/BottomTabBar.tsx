@@ -32,7 +32,7 @@ export const BOTTOM_TAB_LINKS = [
 function BottomTabBar() {
 	const pathname = usePathname();
 	return (
-		<div className="fixed md:hidden bottom-2 left-1/2 transform -translate-x-1/2 py-2 pt-3.5 px-8 w-fit  bg-cream flex justify-center gap-[14vw] items-baseline rounded-full shadow-md border border-gray-800/10">
+		<div className="fixed md:hidden bottom-2 left-1/2 transform -translate-x-1/2 py-2 pt-3.5 px-8 w-fit  bg-cream flex justify-center gap-[14vw] items-baseline rounded-full shadow-md border border-gray-800/10 z-30">
 			{BOTTOM_TAB_LINKS.map(({ path, name, Icon, id }) => {
 				return (
 					<Link

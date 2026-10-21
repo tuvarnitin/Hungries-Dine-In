@@ -1,11 +1,11 @@
+import { ICartItem } from "@/types/cart";
 
 export type OrderHistory = {
 	id: string;
 	date: string;
-	restaurant: string;
 	total: string;
 	rating: number;
-	items: string[];
+	items: ICartItem[];
 };
 
 export interface OrderPricingProps {

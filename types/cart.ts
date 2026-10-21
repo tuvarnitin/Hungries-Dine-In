@@ -11,7 +11,8 @@ export interface ICartItem {
 	name: string;
 	price: number;
 	quantity: number;
-	desc:string
+	desc:string;
+	category:string;
 }
 
 export interface CartItemType {

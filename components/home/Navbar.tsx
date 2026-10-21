@@ -10,7 +10,7 @@ const Navbar = () => {
 	const router = useRouter()
 
 	return (
-		<nav className="flex justify-between items-center py-2 px-2 pr-5 bg-white rounded-full">
+		<nav className="flex justify-between items-center py-2 px-2 pr-5 bg-white rounded-full gap-4">
 			<div className="flex items-center gap-2">
 				<div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
 					<Utensils
@@ -30,7 +30,7 @@ const Navbar = () => {
 						</>
 					) : (
 						<div>
-							<p className="text-[10px] text-primary">YOUR TABLE</p>
+							<p className="text-[10px] text-primary ml-">YOUR TABLE</p>
 							<h1 className="text-sm font-medium text-muted-text">No table scaned</h1>
 						</div>
 					)}
