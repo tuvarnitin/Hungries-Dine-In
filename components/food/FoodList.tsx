@@ -88,10 +88,15 @@ const FoodList = ({
 						aria-hidden="true"
 					/>
 				)}
-				{isFetchingNextPage &&
-					Array.from({ length: 4 }).map((_, index) => (
+				{isFetchingNextPage && (
+			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+				{
+				Array.from({ length: 4 }).map((_, index) => (
 						<FoodCardSkeleton key={index} />
-					))}
+					))
+				}
+			</div>)
+				}
 			</div>
 		</>
 	);
