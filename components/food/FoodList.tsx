@@ -50,9 +50,13 @@ const FoodList = ({
 	const foods = data?.pages.flatMap((page) => page.foods) ?? [];
 
 	if (isPending) {
-		return Array.from({ length: 4 }).map((_, index) => (
+		return (
+			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+				{Array.from({ length: 4 }).map((_, index) => (
 			<FoodCardSkeleton key={index} />
-		));
+		))}
+			</div>
+		)
 	}
 	if (foods.length === 0) {
 		return <NoResults />;
