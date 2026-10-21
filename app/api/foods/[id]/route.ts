@@ -11,10 +11,10 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  if (!id) {
+  if (id) {
     return NextResponse.json(
-      { message: "Food ID is required" },
-      { status: 400 }
+      { message: "Food id received" },
+      { status: 200 }
     );
   }
   //get food item logic will come here 
