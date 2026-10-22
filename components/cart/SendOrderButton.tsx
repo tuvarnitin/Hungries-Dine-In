@@ -87,6 +87,7 @@ export default function SendOrderButton({
 			};
 
 			const res = await axios.post("/api/orders", orderPayload);
+			console.log(res)
 
 			if (res.status === 200 || res.status === 201) {
 				dispatch(clearCart());

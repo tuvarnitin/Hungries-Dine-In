@@ -18,14 +18,15 @@ export default function ScannerPage() {
 			const fetchTable = async () => {
 				const res = await fetch(`/api/table/${tableId}`);
 				const data = await res.json();
-				console.log(data);
+				console.log(data)
 				dispatch(
-					addTable({ tableNumber: data.tableNumber, saveAt: Date.now(),id:data.tableId }),
+					addTable({ tableNumber: data?.table?.tableNumber, saveAt: Date.now(),id:data?.table?.id }),
 				);
 			};
 			fetchTable();
 		} catch (error) {
 			console.log(error);
+			alert(JSON.stringify(error))
 		} finally {
 			setPause(false);
 			router.replace("/");
