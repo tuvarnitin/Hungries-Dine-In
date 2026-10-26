@@ -1,13 +1,11 @@
-import { X } from "lucide-react";
+import { IndianRupee, X } from "lucide-react";
 import { CartItemProps } from "@/types/cart";
 import QuantityControl from "@/components/cart/QuantityControl";
 import { useDispatch } from "react-redux";
 import { removeItem, updateQuantity } from "@/store/features/cart/cartSlice";
 
-export default function CartItem({
-	cartItem
-}: CartItemProps) {
-	const dispatch = useDispatch()
+export default function CartItem({ cartItem }: CartItemProps) {
+	const dispatch = useDispatch();
 	return (
 		<div className="bg-cream rounded-3xl p-4 shadow-sm relative">
 			<button
@@ -35,18 +33,29 @@ export default function CartItem({
 						{cartItem.desc}
 					</p>
 
-					<p className="text-base font-bold text-neutral-900">
-						<span className="font-(family-name:--font-playfair) text-2xl font-bold text-red">
-							${cartItem.price.toFixed(2)}
-						</span>
-					</p>
+					<div className="text-base font-bold text-neutral-900">
+						<div className=" text-red flex items-end">
+							<IndianRupee
+								size={18}
+								className="h-fit"
+								strokeWidth={3}
+							/>
+							<span className="font-(family-name:--font-playfair) text-2xl font-bold leading-6">
+								{Math.ceil(cartItem.price)}
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<QuantityControl
 				quantity={cartItem.quantity}
-				onDecrease={() => dispatch(updateQuantity({ foodId: cartItem.foodId, value: -1 }))}
-				onIncrease={() => dispatch(updateQuantity({ foodId: cartItem.foodId, value: 1 }))}
+				onDecrease={() =>
+					dispatch(updateQuantity({ foodId: cartItem.foodId, value: -1 }))
+				}
+				onIncrease={() =>
+					dispatch(updateQuantity({ foodId: cartItem.foodId, value: 1 }))
+				}
 			/>
 		</div>
 	);

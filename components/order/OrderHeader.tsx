@@ -1,6 +1,6 @@
 "use client";
 import BackButton from "@/components/BackButton";
-import { ActiveOrderType } from "@/types/cart";
+import { ActiveOrderType } from "@/components/order/ActiveOrders";
 
 type Props = {
 	activeOrder: ActiveOrderType;

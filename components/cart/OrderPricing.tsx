@@ -1,10 +1,9 @@
 import { OrderPricingProps } from "@/types/order";
-import { Info } from "lucide-react";
+import { IndianRupee, Info } from "lucide-react";
 
 export default function OrderPricing({
 	totalItems,
 	subtotal,
-	serviceFee,
 	estimatedTax,
 	totalDue,
 }: OrderPricingProps) {
@@ -16,26 +15,44 @@ export default function OrderPricing({
 				<div className="flex justify-between text-neutral-600 font-medium">
 					<span>Subtotal ({totalItems} items)</span>
 
-					<span className="text-dark-text font-semibold">
-						${subtotal.toFixed(2)}
-					</span>
+					<div className="flex items-end">
+						<IndianRupee
+							size={11}
+							className="h-fit"
+							strokeWidth={3}
+						/>
+						<span className="text-dark-text text-sm font-semibold leading-3">
+							{subtotal}
+						</span>
+					</div>
 				</div>
 
 				<div className="flex justify-between text-neutral-600 font-medium">
 					<span>Estimated Tax (8.25%)</span>
-
-					<span className="text-dark-text font-semibold">
-						${estimatedTax.toFixed(2)}
-					</span>
+					<div className="flex items-end">
+						<IndianRupee
+							size={11}
+							className="h-fit"
+							strokeWidth={3}
+						/>
+						<span className="text-dark-text text-sm font-semibold leading-3">
+							{estimatedTax}
+						</span>
+					</div>
 				</div>
 			</div>
 
 			<div className="pt-3 border-t border-neutral-100 flex justify-between items-center">
 				<span className="text-sm font-bold text-dark-text">Total Due</span>
 
-				<span className="text-xl font-extrabold text-red font-(family-name:--font-playfair)">
-					${totalDue.toFixed(2)}
-				</span>
+				<div className="text-red font-(family-name:--font-playfair) flex items-end">
+					<IndianRupee
+						size={16}
+						className="h-fit"
+						strokeWidth={3}
+					/>
+					<span className="text-xl font-extrabold leading-6">{Math.ceil(Number(totalDue))}</span>
+				</div>
 			</div>
 		</div>
 	);

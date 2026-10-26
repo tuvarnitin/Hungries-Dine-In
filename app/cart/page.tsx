@@ -20,12 +20,11 @@ export default function CartScreen() {
 	// Calculations
 	const totalItemsCount = items.reduce((acc, item) => acc + item.quantity, 0);
 	const subtotal = items.reduce(
-		(acc, item) => acc + item.price * item.quantity,
+		(acc, item) => Math.ceil(acc + item.price * item.quantity),
 		0,
-	);
-	const serviceFee = subtotal * 0.03;
-	const estimatedTax = subtotal * 0.0825;
-	const totalDue = subtotal + serviceFee + estimatedTax;
+	)
+	const estimatedTax = Math.ceil(subtotal * 0.0825);
+	const totalDue = subtotal + estimatedTax;
 
 	const dispatch = useDispatch();
 
@@ -50,7 +49,6 @@ export default function CartScreen() {
 						<OrderPricing
 							totalItems={totalItemsCount}
 							subtotal={subtotal}
-							serviceFee={serviceFee}
 							estimatedTax={estimatedTax}
 							totalDue={totalDue}
 						/>

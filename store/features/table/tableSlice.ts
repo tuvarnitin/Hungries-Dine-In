@@ -27,7 +27,7 @@ const tableSlice = createSlice({
 			state.id = null;
 		},
 		checkTableExpiry: (state) => {
-			const ONE_HOUR = 60 * 1000;
+			const ONE_HOUR = 60 * 60 * 1000;
 			if (state.saveAt && Date.now() - state.saveAt > ONE_HOUR) {
 				state.saveAt = null;
 				state.tableNumber = null;

@@ -17,11 +17,11 @@ const FoodImage = ({ food, isVeg }: FoodImageProps) => {
     const [hasError, setHasError] = useState(false);
 
     return (
-        <div className="group/image relative h-[clamp(130px,18vw,180px)] w-[clamp(130px,18vw,180px)] shrink-0 overflow-hidden rounded-[22px] bg-gray-200">
+        <div className="group/image relative h-[clamp(126px,14vw,120px)] w-[clamp(126px,14vw,120px)] shrink-0 overflow-hidden rounded-[22px] bg-gray-200">
             {/* Skeleton */}
             {isLoaded && !hasError && (
                 <div
-                    className="absolute inset-0 z-10 animate-pulse bg-gradient-to-r from-dark-text/10 via-dark-text/5 to-dark-text/10"
+                    className="absolute inset-0 z-10 animate-pulse bg-linear-to-r from-dark-text/10 via-dark-text/5 to-dark-text/10"
                     aria-hidden="true"
                 />
             )}
@@ -32,7 +32,7 @@ const FoodImage = ({ food, isVeg }: FoodImageProps) => {
                     src={food.img}
                     alt={food.name}
                     fill
-                    sizes="(max-width: 640px) 130px, (max-width: 1024px) 18vw, 180px"
+                    loading="lazy"
                     onLoad={() => setIsLoaded(true)}
                     onError={() => setHasError(true)}
                     className={`object-cover transition-[opacity,transform] duration-500 group-hover/image:scale-105 ${isLoaded ? "opacity-100" : "opacity-0"
@@ -43,8 +43,7 @@ const FoodImage = ({ food, isVeg }: FoodImageProps) => {
             {/* Error fallback */}
             {hasError && (
                 <div className="flex h-full items-center justify-center text-center text-xs text-gray-500">
-                    <Image src={"/food-img-na.jpg"} alt="food image not available" fill
-                        sizes="(max-width: 640px) 130px, (max-width: 1024px) 18vw, 180px"
+                    <Image src={"/food-img-na.jpg"} alt="food image not available" fill loading="lazy"
                         className={`object-cover transition-[opacity,transform] duration-500 group-hover/image:scale-105 opacity-100`} />
                 </div>
             )}

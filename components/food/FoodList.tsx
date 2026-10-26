@@ -45,18 +45,23 @@ const FoodList = ({
 		observer.observe(container);
 		return () => observer.disconnect();
 	}, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-	console.log(data);
 
 	const foods = data?.pages.flatMap((page) => page.foods) ?? [];
 
 	if (isPending) {
 		return (
-			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-				{Array.from({ length: 4 }).map((_, index) => (
-			<FoodCardSkeleton key={index} />
-		))}
-			</div>
-		)
+			<>
+				<div className="flex justify-between pt-6 pb-3">
+					<h1 className="text-xl font-bold pl-3">{title}</h1>
+					<p className="text-xs text-gold">View All ({foods?.length})</p>
+				</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+					{Array.from({ length: 4 }).map((_, index) => (
+						<FoodCardSkeleton key={index} />
+					))}
+				</div>
+			</>
+		);
 	}
 	if (foods.length === 0) {
 		return <NoResults />;
@@ -67,10 +72,6 @@ const FoodList = ({
 			<div className="pb-20 -mt-2">
 				{foods && foods.length > 0 && (
 					<>
-						<div className="flex justify-between pt-6 pb-3">
-							<h1 className="text-xl font-bold pl-3">{title}</h1>
-							<p className="text-xs text-gold">View All (23)</p>
-						</div>
 						<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 							{foods.map((food) => (
 								<FoodCard
@@ -89,14 +90,12 @@ const FoodList = ({
 					/>
 				)}
 				{isFetchingNextPage && (
-			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-				{
-				Array.from({ length: 4 }).map((_, index) => (
-						<FoodCardSkeleton key={index} />
-					))
-				}
-			</div>)
-				}
+					<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<FoodCardSkeleton key={index} />
+						))}
+					</div>
+				)}
 			</div>
 		</>
 	);

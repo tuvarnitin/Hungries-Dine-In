@@ -5,7 +5,6 @@ import SearchBar from "@/components/home/SearchBar";
 import HomeBanner from "@/components/home/HomeBanner";
 import Filters from "@/components/home/Filters";
 import FoodList from "@/components/food/FoodList";
-import NoResults from "@/components/home/NoResults";
 
 export default function Home() {
 	const [selectedFilter, setSelectedFilter] = useState("All");

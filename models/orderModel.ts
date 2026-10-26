@@ -91,8 +91,8 @@ const orderSchema = new Schema<IOrder>(
 			enum: [
 				"pending",
 				"accepted",
-				"rejected",
 				"preparing",
+				"rejected",
 				"ready",
 				"delivered",
 				"cancelled",

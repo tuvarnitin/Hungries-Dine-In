@@ -1,5 +1,6 @@
 import { OrderHistory } from "@/types/order";
 import Button from "@/components/Button";
+import { IndianRupee } from "lucide-react";
 
 type Props = {
 	order: OrderHistory | null;
@@ -26,7 +27,7 @@ export default function ReceiptModal({
 						</h3>
 
 						<p className="text-xs text-muted-text">
-							{order.id} • {order.date}
+							Table #{order.tableNumber} • {order.date}
 						</p>
 					</div>
 
@@ -40,9 +41,9 @@ export default function ReceiptModal({
 					</button>
 				</div>
 
-				{/* <p className="text-xs font-semibold text-muted-text uppercase">
+				<p className="text-xs font-semibold text-muted-text uppercase">
 					Location: {order.restaurant}
-				</p> */}
+				</p>
 
 				<div className="bg-white p-3 rounded-xl border border-muted-text/15 space-y-2">
 					{order.items.map((item, index) => (
@@ -51,7 +52,6 @@ export default function ReceiptModal({
 							className="flex justify-between text-sm text-dark-text"
 						>
 							<span>{item.name}</span>
-
 							<span className="font-medium text-primary">✓</span>
 						</div>
 					))}
@@ -60,9 +60,14 @@ export default function ReceiptModal({
 				<div className="pt-2 border-t border-muted-text/15 flex justify-between items-center">
 					<span className="font-bold text-dark-text">Total Paid</span>
 
-					<span className="font-extrabold text-xl text-red font-(family-name:--font-playfair)">
-						{order.total}
-					</span>
+					<div className="flex items-end text-red font-(family-name:--font-playfair)">
+						<IndianRupee
+							size={13}
+							className="h-fit"
+							strokeWidth={3}
+						/>
+						<span className="font-extrabold text-xl leading-5">{order.total}</span>
+					</div>
 				</div>
 
 				<Button

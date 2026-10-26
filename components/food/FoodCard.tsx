@@ -6,6 +6,7 @@ import {
 	Leaf,
 	Minus,
 	Plus,
+	IndianRupee,
 } from "lucide-react";
 import type { FoodType } from "@/types/food";
 import Button from "@/components/Button";
@@ -50,7 +51,10 @@ export default function FoodCard({ food }: FoodCardProps) {
 				)}
 			</div>
 			{/* Image */}
-			<FoodImage food={food} isVeg={isVeg} />
+			<FoodImage
+				food={food}
+				isVeg={isVeg}
+			/>
 
 			{/* Content */}
 			<div className="flex min-w-0 flex-1 flex-col ">
@@ -79,7 +83,9 @@ export default function FoodCard({ food }: FoodCardProps) {
 
 					<div className="flex items-center gap-1.5">
 						<Clock3 size={17} />
-						<span className="text-[12px] text-nowrap">{food.estPreparationTime} min</span>
+						<span className="text-[12px] text-nowrap">
+							{food.estPreparationTime} min
+						</span>
 					</div>
 				</div>
 
@@ -88,9 +94,16 @@ export default function FoodCard({ food }: FoodCardProps) {
 					className=" flex items-center justify-between
 				 gap-[clamp(1px,3vw,10px)] pt-4"
 				>
-					<span className="font-(family-name:--font-playfair) text-2xl font-bold text-primary">
-						${food.price}
-					</span>
+					<div className=" text-primary flex items-end">
+						<IndianRupee
+							size={18}
+							className="h-fit"
+							strokeWidth={3}
+						/>
+						<span className="font-(family-name:--font-playfair) text-2xl font-bold h-fit leading-6">
+							{Math.ceil(food.price)}
+						</span>
+					</div>
 					{cartItem && cartItem.quantity > 0 ? (
 						<div className="flex items-center space-x-3 bg-white border border-muted-text/10 rounded-full px-1.5 py-0.5 shadow-xs">
 							<button
@@ -134,7 +147,7 @@ export default function FoodCard({ food }: FoodCardProps) {
 											price: food.price,
 											quantity: 1,
 											desc: food.desc,
-											category: food.category
+											category: food.category,
 										}),
 									)
 								}

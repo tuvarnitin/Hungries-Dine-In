@@ -34,10 +34,3 @@ export interface AddOnsType {
 	checked: boolean;
 }
 
-export type ActiveOrderType = {
-	tableNumber: string;
-	branch: string;
-	activeCount: number;
-	subtotal: number;
-	items: CartItemType[];
-};

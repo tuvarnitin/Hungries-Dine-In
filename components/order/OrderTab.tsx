@@ -18,7 +18,7 @@ export default function OrderTabs({ activeTab, onChange }: Props) {
 							: "text-muted-text hover:text-dark-text"
 					}`}
 				>
-					Active Orders
+					Active Orders (10)
 				</button>
 
 				<button

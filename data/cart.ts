@@ -1,4 +1,4 @@
-import { ActiveOrderType, CartItemType } from "@/types/cart";
+import { CartItemType } from "@/types/cart";
 
 export const dummyCartItems: CartItemType[] = [
 ];

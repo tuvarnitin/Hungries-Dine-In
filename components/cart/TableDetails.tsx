@@ -16,13 +16,13 @@ export default function TableDetails() {
 				) : (
 					<div className="flex flex-col text-muted-text items-center">
 						<h1 className="text-sm">No table scaned</h1>
-						<p className="text-[12px]">
+						<p className="text-xs">
 							Scane a table before proceed to order &nbsp;
 							<Link
 								href={"/scanner"}
-								className=" underline"
+								className=" underline text-sm text-primary"
 							>
-								scan
+								<span>scan</span>
 							</Link>
 						</p>
 					</div>

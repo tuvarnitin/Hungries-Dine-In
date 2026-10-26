@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-import {connectDB} from "@/lib/db";
+import { connectDB } from "@/lib/db";
 import Order from "@/models/orderModel";
 import Table from "@/models/tableModel";
 import Food from "@/models/foodModel";
@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
 		await connectDB();
 		const body = await req.json();
 		const { tableId, items } = body;
-		console.log(tableId,items)
 
 		if (
 			typeof tableId !== "string" ||
@@ -20,7 +19,6 @@ export async function POST(req: NextRequest) {
 			items.length === 0 ||
 			items.length > 100
 		) {
-			console.log({ message: "Invalid table or order items" });
 			return NextResponse.json(
 				{ message: "Invalid table or order items" },
 				{ status: 400 },
@@ -35,14 +33,6 @@ export async function POST(req: NextRequest) {
 				quantity?: unknown;
 			};
 
-			console.log(
-				typeof value.foodId === "string" ,
-					mongoose.isValidObjectId(value.foodId) ,
-					typeof value.quantity === "number" ,
-					Number.isSafeInteger(value.quantity) ,
-					value.quantity,
-			);
-
 			return (
 				typeof value.foodId === "string" &&
 				mongoose.isValidObjectId(value.foodId) &&
@@ -54,7 +44,6 @@ export async function POST(req: NextRequest) {
 		});
 
 		if (!validItems) {
-			console.log({ message: "Invalid food IDs or quantities" });
 			return NextResponse.json(
 				{ message: "Invalid food IDs or quantities" },
 				{ status: 400 },
@@ -64,7 +53,6 @@ export async function POST(req: NextRequest) {
 		const table = await Table.findById(tableId).lean();
 
 		if (!table) {
-			console.log({ message: "Table not found" });
 			return NextResponse.json({ message: "Table not found" }, { status: 404 });
 		}
 
@@ -78,7 +66,6 @@ export async function POST(req: NextRequest) {
 			const quantity = (quantities.get(id) ?? 0) + item.quantity;
 
 			if (quantity > 99) {
-				console.log({ message: "Maximum quantity per food is 99" });
 				return NextResponse.json(
 					{ message: "Maximum quantity per food is 99" },
 					{ status: 400 },
@@ -95,15 +82,6 @@ export async function POST(req: NextRequest) {
 			isAvailable: true,
 		}).lean();
 
-		if (foods.length !== foodIds.length) {
-			console.log({ message: "Some food items are unavailable" });
-			return NextResponse.json(
-				{ message: "Some food items are unavailable" },
-				{ status: 409 },
-			);
-		}
-
-		// 6. Calculate prices on the server
 		const orderItems = foods.map((food) => {
 			const quantity = quantities.get(food._id.toString())!;
 
@@ -122,10 +100,7 @@ export async function POST(req: NextRequest) {
 			};
 		});
 
-		const subtotal = orderItems.reduce(
-			(total, item) => total + item.total,
-			0,
-		);
+		const subtotal = orderItems.reduce((total, item) => total + item.total, 0);
 
 		const order = await Order.create({
 			tableId: table._id,
@@ -150,7 +125,6 @@ export async function POST(req: NextRequest) {
 			{ status: 201 },
 		);
 	} catch (error) {
-		console.error("Create order error:", error);
 		return NextResponse.json(
 			{ message: "Failed to create order" },
 			{ status: 500 },
@@ -163,7 +137,6 @@ export async function GET(req: NextRequest) {
 		await connectDB();
 		const { searchParams } = new URL(req.url);
 		const tableId = searchParams.get("tableId");
-		const status = searchParams.get("status");
 
 		const filter: Record<string, any> = {};
 
@@ -177,9 +150,9 @@ export async function GET(req: NextRequest) {
 			filter.tableId = tableId;
 		}
 
-		if (status) {
-			filter.status = status;
-		}
+		filter.status = {
+			$in: ["ready","pending", "accepted", "preparing"],
+		};
 
 		const orders = await Order.find(filter)
 			.populate("items.foodId")
@@ -201,4 +174,3 @@ export async function GET(req: NextRequest) {
 		);
 	}
 }
-

@@ -1,4 +1,5 @@
 import { OrderHistory } from "@/types/order";
+import { IndianRupee } from "lucide-react";
 
 type Props = {
 	order: OrderHistory;
@@ -21,7 +22,7 @@ export default function OrderHistoryCard({
 					: "bg-[#FAF6F0]/60 border-[#F0EBE1]"
 			}`}
 		>
-			<div className="flex items-start justify-between">
+			<div className="flex items-start justify-between w-full">
 				<div className="flex items-start space-x-3">
 					<input
 						type="checkbox"
@@ -32,15 +33,15 @@ export default function OrderHistoryCard({
 
 					<div>
 						<span className="text-xs text-[#7A7067] font-medium">
-							{order.date} • {order.id}
+							{order.date} • Table #{order.tableNumber}
 						</span>
 
-						{/* <h4 className="font-bold text-[#2C221E] text-sm">
+						<h4 className="font-bold text-[#2C221E] text-sm">
 							{order.restaurant}
-						</h4> */}
+						</h4>
 
 						<p className="text-xs text-[#7A7067] mt-0.5 line-clamp-1">
-							{order.items.join(", ")}
+							{order.items.map(({ name }) => `${name}, `)}
 						</p>
 
 						<div className="flex items-center space-x-1 text-amber-500 pt-1">
@@ -50,15 +51,24 @@ export default function OrderHistoryCard({
 						</div>
 					</div>
 				</div>
-
 				<div className="text-right flex flex-col items-end">
-					<span className="font-extrabold text-[#8B2613] text-base">
-						{order.total}
-					</span>
+					<div>
+						<span>{order.status}</span>
+					</div>
+					<div className="flex items-end text-red font-(family-name:--font-playfair)">
+						<IndianRupee
+							size={15}
+							className="h-fit"
+							strokeWidth={3}
+						/>
+						<span className="font-extrabold text-xl leading-6">
+							{order.total}
+						</span>
+					</div>
 
 					<a
 						onClick={() => onViewReceipt(order)}
-						className="mt-2 text-xs text-[#062E1B] font-semibold underline hover:text-dark-text"
+						className="mt-2 text-xs text-primary text-nowrap font-semibold underline hover:text-dark-text"
 					>
 						View Receipt
 					</a>
