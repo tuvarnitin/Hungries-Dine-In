@@ -4,14 +4,12 @@ import { Bell, ChevronRight, Headphones, ScanFace } from "lucide-react";
 
 interface PreferencesSectionProps {
 	onChat?: () => void;
-	isAuthenticated: boolean;
 	onSecurity?: () => void;
 	onSignOut?: () => void;
 }
 
 export default function PreferencesSection({
 	onChat,
-	isAuthenticated,
 }: PreferencesSectionProps) {
 	const [enabled, setEnabled] = useState(false);
 
@@ -22,7 +20,6 @@ export default function PreferencesSection({
 			</h3>
 
 			<ProfileActionCard
-				disabled={!isAuthenticated}
 				Icon={<Bell className="w-5 h-5" />}
 				bg="bg-gold/15"
 				color="text-gold"
@@ -30,7 +27,6 @@ export default function PreferencesSection({
 				subTitle="Real-time disg plating updates"
 				button={
 					<button
-						disabled={!isAuthenticated}
 						type="button"
 						onClick={() => setEnabled((prev) => !prev)}
 						aria-label="Toggle Kitchen Status Alerts"
@@ -48,7 +44,6 @@ export default function PreferencesSection({
 				}
 			/>
 			<ProfileActionCard
-				disabled={false}
 				Icon={<Headphones className="w-5 h-5" />}
 				bg="bg-primary/15"
 				color="text-primary"
@@ -65,7 +60,6 @@ export default function PreferencesSection({
 				}
 			/>
 			<ProfileActionCard
-				disabled={!isAuthenticated}
 				Icon={<ScanFace className="w-5 h-5" />}
 				bg="bg-gold/15"
 				color="text-gold"
