@@ -23,7 +23,6 @@ export default function OrderHistoryList({
 				setLoading(true);
 				const res = await axios.get("/api/orders/history");
 				const data = res.data.orderHistory || [];
-				console.log(data)
 				setOrders(data);
 			} catch (error) {
 				console.log(error);

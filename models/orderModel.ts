@@ -1,4 +1,5 @@
 import mongoose, { Schema, model, models, Types, Model } from "mongoose";
+import { IGuestSession } from "@/models/guestSession";
 
 export interface OrderItem {
 	foodId: Types.ObjectId;
@@ -18,6 +19,7 @@ export type OrderStatus =
 	| "cancelled";
 
 export interface IOrder extends mongoose.Document {
+	guestToken?:string;
 	tableId: Types.ObjectId;
 	tableNumber: number;
 	items: OrderItem[];
@@ -63,6 +65,10 @@ const orderItemSchema = new Schema<OrderItem>(
 
 const orderSchema = new Schema<IOrder>(
 	{
+		guestToken: {
+			type: String,
+			index: true,
+		},
 		tableId: {
 			type: Schema.Types.ObjectId,
 			ref: "Table",
@@ -103,6 +109,6 @@ const orderSchema = new Schema<IOrder>(
 	{ timestamps: true },
 );
 
-const Order: Model<IOrder> = models.Order || model("Order", orderSchema);
+const Order = models.Order || model<IOrder>("Order", orderSchema);
 
 export default Order;

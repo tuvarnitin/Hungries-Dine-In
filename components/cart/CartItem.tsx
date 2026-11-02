@@ -3,6 +3,7 @@ import { CartItemProps } from "@/types/cart";
 import QuantityControl from "@/components/cart/QuantityControl";
 import { useDispatch } from "react-redux";
 import { removeItem, updateQuantity } from "@/store/features/cart/cartSlice";
+import Image from "next/image";
 
 export default function CartItem({ cartItem }: CartItemProps) {
 	const dispatch = useDispatch();
@@ -18,11 +19,15 @@ export default function CartItem({ cartItem }: CartItemProps) {
 			</button>
 
 			<div className="flex space-x-3 items-start pr-6">
-				<img
-					src={cartItem.img}
-					alt={cartItem.name}
-					className="w-20 h-20 rounded-2xl object-cover shrink-0"
-				/>
+				<div className="w-20 h-20 aspect-square overflow-hidden relative">
+					<Image
+						fill
+						sizes="80px"
+						src={cartItem.img}
+						alt={cartItem.name}
+						className="w-full h-full rounded-2xl object-cover"
+					/>
+				</div>
 
 				<div className="space-y-1.5 flex-1">
 					<h3 className="font-(family-name:--font-playfair) text-md font-bold leading-tight w-[90%]">

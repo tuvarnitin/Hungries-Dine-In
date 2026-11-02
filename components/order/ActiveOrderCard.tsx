@@ -43,6 +43,7 @@ export default function ActiveOrderCard({ activeOrder, subtotal }: Props) {
 										src={cart.foodId.img}
 										alt={cart.name}
 										fill
+										sizes="64px"
 										loading="lazy"
 										className="w-fulll h-full aspect-square rounded-xl object-cover shadow-xs shrink-0"
 									/>

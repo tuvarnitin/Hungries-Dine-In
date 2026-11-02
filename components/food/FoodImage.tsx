@@ -32,6 +32,7 @@ const FoodImage = ({ food, isVeg }: FoodImageProps) => {
                     src={food.img}
                     alt={food.name}
                     fill
+                    sizes="130px"
                     loading="lazy"
                     onLoad={() => setIsLoaded(true)}
                     onError={() => setHasError(true)}

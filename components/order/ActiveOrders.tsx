@@ -44,6 +44,7 @@ export default function ActiveOrders({ onViewCart, onCallWaiter }: Props) {
 		(state: RootState) => state.table.tableNumber,
 	);
 	const activeOrdersTotalAmount = Math.ceil(activeOrders.reduce((amount,order) => amount + order.subtotal,0))
+	console.log(activeOrders)
 	useEffect(() => {
 
 		const fetchCurrentOrder = async () => {

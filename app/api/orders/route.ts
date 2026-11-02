@@ -1,16 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 import { connectDB } from "@/lib/db";
-import Order from "@/models/orderModel";
+import Order, { OrderItem, OrderStatus } from "@/models/orderModel";
 import Table from "@/models/tableModel";
 import Food from "@/models/foodModel";
+import { cookies } from "next/headers";
+
+import {
+	createGuestSession,
+	findValidGuestSession,
+	GUEST_SESSION_COOKIE,
+} from "@/lib/guest-session";
+import axios from "axios";
 
 export async function POST(req: NextRequest) {
 	try {
 		await connectDB();
 		const body = await req.json();
 		const { tableId, items } = body;
+		const cookieStore = await cookies();
+		const sessionToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value;
+		let isGuest: boolean;
+		if (sessionToken) {
+			const res = await axios.get("/api/guest-session");
+			isGuest = res?.data?.guest;
+		}
+
+		
 
 		if (
 			typeof tableId !== "string" ||
@@ -85,7 +102,7 @@ export async function POST(req: NextRequest) {
 		const orderItems = foods.map((food) => {
 			const quantity = quantities.get(food._id.toString())!;
 
-			const price = food.price;
+			const price = Math.ceil(food.price);
 
 			if (typeof price !== "number" || !Number.isFinite(price) || price < 0) {
 				throw new Error("Invalid menu price");
@@ -99,16 +116,32 @@ export async function POST(req: NextRequest) {
 				total: price * quantity,
 			};
 		});
+		const serviceChargesPercentage = process.env.SERVICE_CHARGES_PERCENTAGE;
+		const total = orderItems.reduce(
+			(total, item) => total + Math.ceil(item.total),
+			0,
+		);
+		const serviceCharges =
+			total * ((Number(serviceChargesPercentage) ?? 8.25) / 100);
+		const subtotal = Math.ceil(total + serviceCharges);
 
-		const subtotal = orderItems.reduce((total, item) => total + item.total, 0);
-
-		const order = await Order.create({
+		interface IOrder {
+			guestSession?: Types.ObjectId;
+			tableId: Types.ObjectId;
+			tableNumber: number;
+			items: OrderItem[];
+			subtotal: number;
+			status: OrderStatus;
+		}
+		const orderData: IOrder = {
 			tableId: table._id,
 			tableNumber: table.tableNumber,
 			items: orderItems,
 			subtotal,
-			status: "pending",
-		});
+			status: "pending" as const,
+		};
+
+		const order = await Order.create(orderData);
 
 		return NextResponse.json(
 			{
@@ -120,11 +153,13 @@ export async function POST(req: NextRequest) {
 					subtotal: order.subtotal,
 					status: order.status,
 					createdAt: order.createdAt,
+					guestSession: order.guestToken,
 				},
 			},
 			{ status: 201 },
 		);
 	} catch (error) {
+		console.log(error);
 		return NextResponse.json(
 			{ message: "Failed to create order" },
 			{ status: 500 },
@@ -151,7 +186,7 @@ export async function GET(req: NextRequest) {
 		}
 
 		filter.status = {
-			$in: ["ready","pending", "accepted", "preparing"],
+			$in: ["ready", "pending", "accepted", "preparing"],
 		};
 
 		const orders = await Order.find(filter)

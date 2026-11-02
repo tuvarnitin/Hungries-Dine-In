@@ -53,7 +53,11 @@ export default function OrderHistoryCard({
 				</div>
 				<div className="text-right flex flex-col items-end">
 					<div>
-						<span>{order.status}</span>
+						<span
+							className={`text-[10px] py-0.5 px-1 rounded-full ${order.status === "delivered" ? "text-green-500 bg-green-100 border border-green-500" : "text-red-500 bg-red-100 border border-red-500"}`}
+						>
+							{order.status}
+						</span>
 					</div>
 					<div className="flex items-end text-red font-(family-name:--font-playfair)">
 						<IndianRupee

@@ -16,6 +16,6 @@ const tableSchema = new Schema<ITable>({
 },{timestamps:true});
 
 const Table =
-	mongoose.models.Table || mongoose.model("Table", tableSchema);
+	mongoose.models.Table || mongoose.model<ITable>("Table", tableSchema);
 
 export default Table;
