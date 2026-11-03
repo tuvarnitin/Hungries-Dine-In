@@ -1,92 +1,54 @@
 import ActiveOrderCard from "@/components/order/ActiveOrderCard";
 import { RootState } from "@/store/store";
 import { IndianRupee, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Button from "@/components/Button";
+import { useActiveOrders } from "@/store/features/order/query";
+
+export type { ActiveOrderType } from "@/store/features/order/api";
 
 type Props = {
 	onViewCart: () => void;
 	onCallWaiter: () => void;
+	setAcitveOrdersCount : Dispatch<number>;
 };
 
-type OrderItem = {
-	foodId: {
-		_id: string;
-		img: string;
-		desc: string;
-		rating: number;
-		tags: string[];
-		estPreparationTime: string;
-	};
-	name: string;
-	quantity: number;
-	price: number;
-	subtotal: number;
-};
-
-export type ActiveOrderType = {
-	_id: string;
-	tableNumber: string;
-	branch: string;
-	activeCount: number;
-	subtotal: number;
-	items: OrderItem[];
-	status: string;
-};
-
-export default function ActiveOrders({ onViewCart, onCallWaiter }: Props) {
-	const [loading, setLoading] = useState(true);
-	const [activeOrders, setActiveOrders] = useState<ActiveOrderType[]>([]);
+export default function ActiveOrders({
+	onViewCart,
+	onCallWaiter,
+	setAcitveOrdersCount,
+}: Props) {
 	const tableId = useSelector((state: RootState) => state.table.id);
-	const [error,setError] = useState<string | null>(null)
-	const currentTableNumber = useSelector(
-		(state: RootState) => state.table.tableNumber,
-	);
-	const activeOrdersTotalAmount = Math.ceil(activeOrders.reduce((amount,order) => amount + order.subtotal,0))
-	console.log(activeOrders)
+	const {
+		data: activeOrders = [],
+		isPending,
+		isError,
+		refetch,
+	} = useActiveOrders(tableId);
+
 	useEffect(() => {
+		setAcitveOrdersCount(activeOrders.length);
+	}, [activeOrders, setAcitveOrdersCount]);
 
-		const fetchCurrentOrder = async () => {
-			setLoading(true);
-			try {
-				const queryParams = new URLSearchParams({ status: "pending" });
-				if (tableId) {
-					queryParams.append("tableId", tableId);
-				}
+	const activeOrdersTotalAmount = Math.ceil(
+		activeOrders.reduce((amount, order) => amount + order.subtotal, 0),
+	);
 
-				const res = await fetch(`/api/orders?${queryParams.toString()}`);
-				if (!res.ok) {
-					throw new Error("Failed to fetch order");
-				}
-
-				const data = await res.json();
-				if (data?.orders?.length > 0) {
-					setActiveOrders(data.orders);
-				} else {
-					setActiveOrders([]);
-				}
-			} catch (error : any) {
-				setError(error)
-			} finally {
-				setLoading(false)
-			}
-		};
-
-		fetchCurrentOrder();
-
-		return () => {
-			
-		};
-	}, []);
-
-	if(error){
-		return <p className="text-center text-muted-text mt-10">No active orders found</p>
+	if (isError) {
+		return (
+			<div className="mt-10 text-center text-muted-text" role="alert">
+				<p>Couldn&apos;t load active orders.</p>
+				<button type="button" className="mt-2 underline" onClick={() => refetch()}>
+					Try again
+				</button>
+			</div>
+		);
 	}
 
 	return (
 		<div className="">
-			{loading ? (
+			{isPending ? (
 				<div className="flex flex-col items-center justify-center py-20 space-y-3">
 					<Loader2 className="w-8 h-8 text-primary animate-spin" />
 					<p className="text-xs text-muted-text">Fetching current order...</p>
@@ -101,7 +63,9 @@ export default function ActiveOrders({ onViewCart, onCallWaiter }: Props) {
 						/>
 					))}
 					<div className="flex justify-between px-3 py-2 items-end">
-						<h1 className="text-lg font-bold leading-4">Total Order Amount : </h1>
+						<h1 className="text-lg font-bold leading-4">
+							Total Order Amount :{" "}
+						</h1>
 						<div className="flex items-end">
 							<IndianRupee
 								size={16}

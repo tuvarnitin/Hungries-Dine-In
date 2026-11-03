@@ -1,40 +1,50 @@
 import { OrderHistory } from "@/types/order";
 import OrderHistoryCard from "@/components/order/OrderHistoryCard";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Dispatch, useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { useOrderHistory } from "@/store/features/order/query";
 
 type Props = {
 	selectedItems: Record<string, boolean>;
 	onSelect: (id: string) => void;
 	onViewReceipt: (order: OrderHistory) => void;
+	setOrderHistoryCount : Dispatch<number>
 };
 
 export default function OrderHistoryList({
 	selectedItems,
 	onSelect,
 	onViewReceipt,
+	setOrderHistoryCount,
 }: Props) {
-	const [orders, setOrders] = useState<OrderHistory[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
+	const {
+		data: orders = [],
+		isPending,
+		isError,
+		refetch,
+	} = useOrderHistory();
+
 	useEffect(() => {
-		const fetchHistory = async () => {
-			try {
-				setLoading(true);
-				const res = await axios.get("/api/orders/history");
-				const data = res.data.orderHistory || [];
-				setOrders(data);
-			} catch (error) {
-				console.log(error);
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchHistory()
-	}, []);
+		setOrderHistoryCount(orders.length);
+	}, [orders, setOrderHistoryCount]);
+
+	if (isError) {
+		return (
+			<div
+				className="bg-white rounded-3xl p-5 shadow-sm border border-cream min-h-50 text-center text-muted-text"
+				role="alert"
+			>
+				<p>Couldn&apos;t load order history.</p>
+				<button type="button" className="mt-2 underline" onClick={() => refetch()}>
+					Try again
+				</button>
+			</div>
+		);
+	}
+
 	return (
 		<div className="bg-white rounded-3xl p-5 shadow-sm border border-cream space-y-4 min-h-50">
-			{loading ? (
+			{isPending ? (
 				<div className="min-h-50 flex items-center justify-center">
 					<Loader2 className="animate-spin text-muted-text" />
 				</div>
@@ -62,7 +72,9 @@ export default function OrderHistoryList({
 							))}
 						</>
 					) : (
-						<p className="text-center text-muted-text text-sm">No history found</p>
+						<p className="text-center text-muted-text text-sm">
+							No history found
+						</p>
 					)}
 				</>
 			)}

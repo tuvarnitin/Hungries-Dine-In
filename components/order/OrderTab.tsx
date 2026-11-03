@@ -3,9 +3,16 @@ import { Tab } from "@/types/shared";
 type Props = {
 	activeTab: Tab;
 	onChange: (tab: Tab) => void;
+	acitveOrdersCount: number;
+	orderHistoryCount: number;
 };
 
-export default function OrderTabs({ activeTab, onChange }: Props) {
+export default function OrderTabs({
+	activeTab,
+	onChange,
+	acitveOrdersCount = 0,
+	orderHistoryCount= 0
+} : Props) {
 	return (
 		<div className="w-full max-w-md px-4">
 			<div className="bg-muted-text/10 p-1.5 rounded-full flex items-center shadow-inner">
@@ -18,7 +25,7 @@ export default function OrderTabs({ activeTab, onChange }: Props) {
 							: "text-muted-text hover:text-dark-text"
 					}`}
 				>
-					Active Orders (10)
+					Active Orders ({acitveOrdersCount})
 				</button>
 
 				<button
@@ -30,7 +37,7 @@ export default function OrderTabs({ activeTab, onChange }: Props) {
 							: "text-muted-text hover:text-dark-text"
 					}`}
 				>
-					Order History
+					Order History ({orderHistoryCount})
 				</button>
 			</div>
 		</div>

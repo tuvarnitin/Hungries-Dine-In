@@ -8,6 +8,8 @@ import { RootState } from "@/store/store";
 import { clearCart } from "@/store/features/cart/cartSlice";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
+import { orderQueryKeys } from "@/store/features/order/query";
 
 interface SendOrderButtonProps {
 	totalDue: string;
@@ -22,6 +24,7 @@ export default function SendOrderButton({
 }: SendOrderButtonProps) {
 	const dispatch = useDispatch();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const [isVerifying, setIsVerifying] = useState(false);
 	const [isValidTable, setIsValidTable] = useState(false);
@@ -91,6 +94,9 @@ export default function SendOrderButton({
 
 			if (res.status === 200 || res.status === 201) {
 				dispatch(clearCart());
+				await queryClient.invalidateQueries({
+					queryKey: orderQueryKeys.active,
+				});
 				onClick?.();
 				router.push("/orders");
 			}

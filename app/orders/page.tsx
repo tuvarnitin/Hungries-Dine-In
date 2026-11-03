@@ -24,6 +24,8 @@ export default function OrdersPage() {
 
 	const [isCallWaiterOpen, setIsCallWaiterOpen] = useState(false);
 	const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+	const [acitveOrdersCount, setActiveOrdersCount] = useState(0);
+	const [orderHistoryCount, setOrderHistoryCount] = useState(0);
 	const [toastMessage, setToastMessage] = useState<string | null>(null);
 
 	const showToast = (message: string) => {
@@ -62,9 +64,7 @@ export default function OrdersPage() {
 			<CallWaiterModal
 				open={isCallWaiterOpen}
 				onClose={() => setIsCallWaiterOpen(false)}
-				tableNumber={
-					'90'
-				}
+				tableNumber={"90"}
 			/>
 
 			<ReceiptModal
@@ -77,19 +77,23 @@ export default function OrdersPage() {
 			<OrderTabs
 				activeTab={activeTab}
 				onChange={setActiveTab}
+				acitveOrdersCount={acitveOrdersCount}
+				orderHistoryCount={orderHistoryCount}
 			/>
 
 			<main className="w-full max-w-md space-y-4">
-				{activeTab === "active" ? (						
-						<ActiveOrders
-							onViewCart={() => router.push("/cart")}
-							onCallWaiter={() => setIsCallWaiterOpen(true)}
-						/>
+				{activeTab === "active" ? (
+					<ActiveOrders
+						onViewCart={() => router.push("/cart")}
+						onCallWaiter={() => setIsCallWaiterOpen(true)}
+						setAcitveOrdersCount={setActiveOrdersCount}
+					/>
 				) : (
 					<OrderHistoryList
 						selectedItems={selectedHistoryItems}
 						onSelect={toggleHistorySelection}
 						onViewReceipt={openReceiptModal}
+						setOrderHistoryCount={setOrderHistoryCount}
 					/>
 				)}
 			</main>

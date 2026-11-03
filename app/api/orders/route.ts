@@ -1,111 +1,160 @@
 import { NextRequest, NextResponse } from "next/server";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
 import { connectDB } from "@/lib/db";
-import Order, { OrderItem, OrderStatus } from "@/models/orderModel";
+import Order from "@/models/orderModel";
 import Table from "@/models/tableModel";
 import Food from "@/models/foodModel";
-import { cookies } from "next/headers";
 
 import {
 	createGuestSession,
 	findValidGuestSession,
 	GUEST_SESSION_COOKIE,
 } from "@/lib/guest-session";
-import axios from "axios";
+import { cookies } from "next/headers";
+
+const MAX_ITEMS = 100;
+const MAX_QUANTITY = 99;
+const DEFAULT_SERVICE_CHARGE = 8.25;
+const GUEST_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
+
+type RequestedItem = {
+	foodId: string;
+	quantity: number;
+};
+
+type CreateOrderBody = {
+	tableId: string;
+	items: RequestedItem[];
+};
+
+function errorResponse(message: string, status: number) {
+	console.log(message)
+	return NextResponse.json({ success: false, message }, { status });
+}
+
+function validateOrderBody(body: unknown): body is CreateOrderBody {
+	if (!body || typeof body !== "object") return false;
+
+	const value = body as Record<string, unknown>;
+
+	if (
+		typeof value.tableId !== "string" ||
+		!mongoose.isValidObjectId(value.tableId)
+	) {
+		return false;
+	}
+
+	if (
+		!Array.isArray(value.items) ||
+		value.items.length === 0 ||
+		value.items.length > MAX_ITEMS
+	) {
+		return false;
+	}
+
+	return value.items.every((item: unknown) => {
+		if (!item || typeof item !== "object") return false;
+
+		const value = item as Record<string, unknown>;
+
+		return (
+			typeof value.foodId === "string" &&
+			mongoose.isValidObjectId(value.foodId) &&
+			typeof value.quantity === "number" &&
+			Number.isSafeInteger(value.quantity) &&
+			value.quantity >= 1 &&
+			value.quantity <= MAX_QUANTITY
+		);
+	});
+}
+
+async function resolveGuestSession(token?: string) {
+	if (token) {
+		const result = await findValidGuestSession(token);
+		if (result) {
+			return {
+				token,
+				isNew: false,
+			};
+		}
+		console.log("Result is false")
+	}
+
+	const session = await createGuestSession();
+
+	if (!session?.token) {
+		throw new Error("Unable to create guest session");
+	}
+
+	return {
+		token: session.token,
+		isNew: true,
+	};
+}
 
 export async function POST(req: NextRequest) {
 	try {
 		await connectDB();
-		const body = await req.json();
+
+		// Validate request body
+		let body: unknown;
+
+		try {
+			body = await req.json();
+		} catch {
+			return errorResponse("Invalid JSON payload", 400);
+		}
+
+		if (!validateOrderBody(body)) {
+			return errorResponse("Invalid table ID or order items", 400);
+		}
+
 		const { tableId, items } = body;
-		const cookieStore = await cookies();
-		const sessionToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value;
-		let isGuest: boolean;
-		if (sessionToken) {
-			const res = await axios.get("/api/guest-session");
-			isGuest = res?.data?.guest;
-		}
 
-		
-
-		if (
-			typeof tableId !== "string" ||
-			!mongoose.isValidObjectId(tableId) ||
-			!Array.isArray(items) ||
-			items.length === 0 ||
-			items.length > 100
-		) {
-			return NextResponse.json(
-				{ message: "Invalid table or order items" },
-				{ status: 400 },
-			);
-		}
-
-		const validItems = items.every((item: unknown) => {
-			if (!item || typeof item !== "object") return false;
-
-			const value = item as {
-				foodId?: unknown;
-				quantity?: unknown;
-			};
-
-			return (
-				typeof value.foodId === "string" &&
-				mongoose.isValidObjectId(value.foodId) &&
-				typeof value.quantity === "number" &&
-				Number.isSafeInteger(value.quantity) &&
-				value.quantity >= 1 &&
-				value.quantity <= 99
-			);
-		});
-
-		if (!validItems) {
-			return NextResponse.json(
-				{ message: "Invalid food IDs or quantities" },
-				{ status: 400 },
-			);
-		}
-
+		//Validate table
 		const table = await Table.findById(tableId).lean();
 
 		if (!table) {
-			return NextResponse.json({ message: "Table not found" }, { status: 404 });
+			return errorResponse("Table not found", 404);
 		}
 
+		// Aggregate duplicate food items
 		const quantities = new Map<string, number>();
 
-		for (const item of items as {
-			foodId: string;
-			quantity: number;
-		}[]) {
-			const id = new mongoose.Types.ObjectId(item.foodId).toString();
-			const quantity = (quantities.get(id) ?? 0) + item.quantity;
+		for (const item of items) {
+			const foodId = new mongoose.Types.ObjectId(item.foodId).toString();
 
-			if (quantity > 99) {
-				return NextResponse.json(
-					{ message: "Maximum quantity per food is 99" },
-					{ status: 400 },
-				);
+			const quantity = (quantities.get(foodId) ?? 0) + item.quantity;
+
+			if (quantity > MAX_QUANTITY) {
+				return errorResponse("Maximum quantity per food is 99", 400);
 			}
 
-			quantities.set(id, quantity);
+			quantities.set(foodId, quantity);
 		}
 
 		const foodIds = [...quantities.keys()];
 
+		// Fetch available foods from database
 		const foods = await Food.find({
 			_id: { $in: foodIds },
 			isAvailable: true,
 		}).lean();
 
+		// Ensure every requested food exists and is available
+		if (foods.length !== foodIds.length) {
+			return errorResponse("One or more food items are unavailable", 400);
+		}
+
+		// Calculate order items using database prices
 		const orderItems = foods.map((food) => {
 			const quantity = quantities.get(food._id.toString())!;
 
-			const price = Math.ceil(food.price);
+			const price = Math.ceil(Number(food.price));
 
-			if (typeof price !== "number" || !Number.isFinite(price) || price < 0) {
-				throw new Error("Invalid menu price");
+			if (!Number.isFinite(price) || price < 0) {
+				throw new Error("Invalid food price in database");
 			}
 
 			return {
@@ -116,79 +165,103 @@ export async function POST(req: NextRequest) {
 				total: price * quantity,
 			};
 		});
-		const serviceChargesPercentage = process.env.SERVICE_CHARGES_PERCENTAGE;
-		const total = orderItems.reduce(
-			(total, item) => total + Math.ceil(item.total),
-			0,
-		);
-		const serviceCharges =
-			total * ((Number(serviceChargesPercentage) ?? 8.25) / 100);
-		const subtotal = Math.ceil(total + serviceCharges);
 
-		interface IOrder {
-			guestSession?: Types.ObjectId;
-			tableId: Types.ObjectId;
-			tableNumber: number;
-			items: OrderItem[];
-			subtotal: number;
-			status: OrderStatus;
-		}
-		const orderData: IOrder = {
+		// Calculate subtotal and service charges
+		const total = orderItems.reduce((sum, item) => sum + item.total, 0);
+
+		const configuredCharge = Number(process.env.SERVICE_CHARGES_PERCENTAGE);
+
+		const serviceChargePercentage =
+			process.env.SERVICE_CHARGES_PERCENTAGE?.trim() &&
+			Number.isFinite(configuredCharge) &&
+			configuredCharge >= 0 &&
+			configuredCharge <= 100
+				? configuredCharge
+				: DEFAULT_SERVICE_CHARGE;
+
+		const serviceCharges = Math.ceil(total * (serviceChargePercentage / 100));
+
+		const subtotal = total + serviceCharges;
+
+		// Resolve guest session
+		const cookieStore = await cookies();
+		const existingToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value;
+
+		const guestSession = await resolveGuestSession(existingToken);
+
+		// Create order
+		const order = await Order.create({
 			tableId: table._id,
 			tableNumber: table.tableNumber,
 			items: orderItems,
 			subtotal,
-			status: "pending" as const,
-		};
+			status: "pending",
+			guestToken: guestSession.token,
+		});
 
-		const order = await Order.create(orderData);
-
-		return NextResponse.json(
+		const response = NextResponse.json(
 			{
+				success: true,
 				message: "Order created successfully",
 				order: {
 					id: order._id,
+					tableId: order.tableId,
 					tableNumber: order.tableNumber,
 					items: order.items,
 					subtotal: order.subtotal,
 					status: order.status,
 					createdAt: order.createdAt,
-					guestSession: order.guestToken,
 				},
 			},
 			{ status: 201 },
 		);
+
+		return response;
 	} catch (error) {
-		console.log(error);
-		return NextResponse.json(
-			{ message: "Failed to create order" },
-			{ status: 500 },
-		);
+		console.error("Create order error:", error);
+
+		return errorResponse("Failed to create order", 500);
 	}
 }
 
 export async function GET(req: NextRequest) {
 	try {
 		await connectDB();
+
+		// Get guest session token
+		const cookieStore = await cookies()
+		const sessionToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value;
+
+		if (!sessionToken) {
+			return errorResponse("Guest session not found", 401);
+		}
+
+		// Validate guest session
+		const result = await findValidGuestSession(sessionToken);
+
+		if (!result) {
+			return errorResponse("Invalid or expired guest session", 401);
+		}
+
+		// Validate optional table ID
 		const { searchParams } = new URL(req.url);
 		const tableId = searchParams.get("tableId");
 
-		const filter: Record<string, any> = {};
-
-		if (tableId) {
-			if (!mongoose.isValidObjectId(tableId)) {
-				return NextResponse.json(
-					{ message: "Invalid table ID" },
-					{ status: 400 },
-				);
-			}
-			filter.tableId = tableId;
+		if (tableId && !mongoose.isValidObjectId(tableId)) {
+			return errorResponse("Invalid table ID", 400);
 		}
 
-		filter.status = {
-			$in: ["ready", "pending", "accepted", "preparing"],
+		const filter = {
+			guestToken: sessionToken,
+			status: {
+				$in: ["pending", "accepted", "preparing", "ready"],
+			},
+			...(tableId && {
+				tableId: new mongoose.Types.ObjectId(tableId),
+			}),
 		};
 
+		// Fetch orders
 		const orders = await Order.find(filter)
 			.populate("items.foodId")
 			.sort({ createdAt: -1 })
@@ -197,15 +270,11 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json(
 			{
 				orders,
-				order: orders.length > 0 ? orders[0] : null,
 			},
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error("Fetch orders error:", error);
-		return NextResponse.json(
-			{ message: "Failed to fetch orders" },
-			{ status: 500 },
-		);
+		console.error("Fetch guest orders error:", error);
+		return errorResponse("Failed to fetch orders", 500);
 	}
 }

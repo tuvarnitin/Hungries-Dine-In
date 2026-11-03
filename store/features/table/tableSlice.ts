@@ -19,7 +19,6 @@ const tableSlice = createSlice({
 			state.tableNumber = actions.payload.tableNumber;
 			state.saveAt = actions.payload.saveAt;
 			state.id = actions.payload.id;
-			console.log("State ",actions.payload)
 		},
 		clearTable: (state) => {
 			state.saveAt = null;

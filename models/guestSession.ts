@@ -1,4 +1,4 @@
-import mongoose,{model, Schema,models, Model} from "mongoose";
+import {model, Schema,models} from "mongoose";
 
 export interface IGuestSession extends Document {
     token : string;
@@ -10,7 +10,6 @@ export const guestSchema = new Schema<IGuestSession>({
         type:String,
         required:true,
         unique:true,
-        select:false
     },
     expiresAt:{
         type:Date,
