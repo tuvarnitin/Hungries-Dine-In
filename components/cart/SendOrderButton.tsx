@@ -97,6 +97,9 @@ export default function SendOrderButton({
 				await queryClient.invalidateQueries({
 					queryKey: orderQueryKeys.active,
 				});
+				await queryClient.invalidateQueries({
+					queryKey: orderQueryKeys.history,
+				});
 				onClick?.();
 				router.push("/orders");
 			}

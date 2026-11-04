@@ -1,5 +1,4 @@
-import mongoose, { Schema, model, models, Types, Model } from "mongoose";
-import { IGuestSession } from "@/models/guestSession";
+import mongoose, { Schema, model, models, Types, type Model } from "mongoose";
 
 export interface OrderItem {
 	foodId: Types.ObjectId;
@@ -20,6 +19,7 @@ export type OrderStatus =
 
 export interface IOrder extends mongoose.Document {
 	guestToken?:string;
+	userId?: Types.ObjectId;
 	tableId: Types.ObjectId;
 	tableNumber: number;
 	items: OrderItem[];
@@ -69,6 +69,11 @@ const orderSchema = new Schema<IOrder>(
 			type: String,
 			index: true,
 		},
+		userId: {
+			type: Schema.Types.ObjectId,
+			ref: "User",
+			index: true,
+		},
 		tableId: {
 			type: Schema.Types.ObjectId,
 			ref: "Table",
@@ -108,6 +113,24 @@ const orderSchema = new Schema<IOrder>(
 	},
 	{ timestamps: true },
 );
+
+orderSchema.pre("validate", function () {
+	const hasUserId = this.userId != null;
+	const hasGuestToken = Boolean(this.guestToken);
+
+	if (hasUserId === hasGuestToken) {
+		this.invalidate("userId", "An order must have exactly one owner.");
+	}
+});
+
+const cachedOrderModel = models.Order as Model<IOrder> | undefined;
+if (
+	cachedOrderModel &&
+	(!cachedOrderModel.schema.path("userId") ||
+		!cachedOrderModel.schema.path("guestToken"))
+) {
+	mongoose.deleteModel("Order");
+}
 
 const Order = models.Order || model<IOrder>("Order", orderSchema);
 

@@ -1,40 +1,40 @@
 import { connectDB } from "@/lib/db";
 import { GUEST_SESSION_COOKIE } from "@/lib/guest-session";
+import { getAuthenticatedUserId } from "@/lib/authenticated-user";
+import { transferGuestOrdersToUser } from "@/lib/transfer-guest-orders";
 import Order, { OrderItem } from "@/models/orderModel";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
 	try {
 		await connectDB();
 		const cookieStore = await cookies();
-		const sessionToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value
+		const sessionToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value;
+		const userId = await getAuthenticatedUserId();
 
-		if(!sessionToken){
-			return NextResponse.json({
-				msg:"Session token not found"
-			},{status:401})
+		if (!userId && !sessionToken) {
+			return NextResponse.json(
+				{ orderHistory: [] },
+				{ status: 200 },
+			);
 		}
-		const filter: Record<string, any> = {};
 
-		filter.status = {
-			$in: ["delivered", "cancelled"],
+		if (userId && sessionToken) {
+			await transferGuestOrdersToUser(sessionToken, userId);
+		}
+		const ownerFilter = userId
+			? { userId }
+			: { guestToken: sessionToken! };
+		const filter = {
+			...ownerFilter,
+			status: { $in: ["delivered", "cancelled"] },
 		};
-		filter.guestToken = sessionToken
 
 		const orders = await Order.find(filter)
 			.populate("items.foodId")
 			.sort({ createdAt: -1 })
 			.lean();
-
-		if (!orders) {
-			return NextResponse.json(
-				{
-					msg: "No order history found",
-				},
-				{ status: 400 },
-			);
-		}
 
 		const formatedOrders = orders.map((order) => ({
 			id: order._id,

@@ -73,7 +73,7 @@ export default function OrderHistoryList({
 						</>
 					) : (
 						<p className="text-center text-muted-text text-sm">
-							No history found
+							No orders found.
 						</p>
 					)}
 				</>

@@ -1,6 +1,6 @@
 import { OrderHistory } from "@/types/order";
 import Button from "@/components/Button";
-import { IndianRupee } from "lucide-react";
+import { Check, IndianRupee, X } from "lucide-react";
 
 type Props = {
 	order: OrderHistory | null;
@@ -49,10 +49,18 @@ export default function ReceiptModal({
 					{order.items.map((item, index) => (
 						<div
 							key={`${order.id}-${index}`}
-							className="flex justify-between text-sm text-dark-text"
+							className="flex items-center justify-between gap-2 text-sm text-dark-text"
 						>
 							<span>{item.name}</span>
-							<span className="font-medium text-primary">✓</span>
+							{order.status === "cancelled" ? (
+								<X
+									size={16}
+									aria-label="Cancelled"
+									className="shrink-0 text-red-600"
+								/>
+							) : (
+								<span className="font-medium text-primary">✓</span>
+							)}
 						</div>
 					))}
 				</div>
@@ -66,7 +74,9 @@ export default function ReceiptModal({
 							className="h-fit"
 							strokeWidth={3}
 						/>
-						<span className="font-extrabold text-xl leading-5">{order.total}</span>
+						<span className="font-extrabold text-xl leading-5">
+							{order.total}
+						</span>
 					</div>
 				</div>
 

@@ -10,6 +10,7 @@ interface PreferencesSectionProps {
 
 export default function PreferencesSection({
 	onChat,
+	onSignOut,
 }: PreferencesSectionProps) {
 	const [enabled, setEnabled] = useState(false);
 
@@ -67,6 +68,13 @@ export default function PreferencesSection({
 				subTitle="Face ID active for table pay"
 				button={<ChevronRight className="w-4 h-4 text-muted-text shrink-0" />}
 			/>
+			<button
+				type="button"
+				onClick={onSignOut}
+				className="w-full rounded-full border border-muted-text/20 py-2 text-sm font-semibold text-primary"
+			>
+				Sign out
+			</button>
 		</div>
 	);
 }

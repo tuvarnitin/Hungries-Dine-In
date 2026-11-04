@@ -12,6 +12,8 @@ import {
 	GUEST_SESSION_COOKIE,
 } from "@/lib/guest-session";
 import { cookies } from "next/headers";
+import { getAuthenticatedUserId } from "@/lib/authenticated-user";
+import { transferGuestOrdersToUser } from "@/lib/transfer-guest-orders";
 
 const MAX_ITEMS = 100;
 const MAX_QUANTITY = 99;
@@ -111,6 +113,7 @@ export async function POST(req: NextRequest) {
 		}
 
 		const { tableId, items } = body;
+		const userId = await getAuthenticatedUserId();
 
 		//Validate table
 		const table = await Table.findById(tableId).lean();
@@ -187,7 +190,11 @@ export async function POST(req: NextRequest) {
 		const cookieStore = await cookies();
 		const existingToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value;
 
-		const guestSession = await resolveGuestSession(existingToken);
+		const orderOwner = userId
+			? { userId }
+			: {
+					guestToken: (await resolveGuestSession(existingToken)).token,
+				};
 
 		// Create order
 		const order = await Order.create({
@@ -196,7 +203,7 @@ export async function POST(req: NextRequest) {
 			items: orderItems,
 			subtotal,
 			status: "pending",
-			guestToken: guestSession.token,
+			...orderOwner,
 		});
 
 		const response = NextResponse.json(
@@ -224,41 +231,35 @@ export async function POST(req: NextRequest) {
 	}
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
 	try {
 		await connectDB();
 
-		// Get guest session token
-		const cookieStore = await cookies()
+		const userId = await getAuthenticatedUserId();
+		const cookieStore = await cookies();
 		const sessionToken = cookieStore.get(GUEST_SESSION_COOKIE)?.value;
 
-		if (!sessionToken) {
-			return errorResponse("Guest session not found", 401);
+		if (!userId && !sessionToken) {
+			return NextResponse.json({ orders: [] }, { status: 200 });
 		}
 
-		// Validate guest session
-		const result = await findValidGuestSession(sessionToken);
-
-		if (!result) {
-			return errorResponse("Invalid or expired guest session", 401);
+		if (!userId) {
+			const result = await findValidGuestSession(sessionToken);
+			if (!result) {
+				return NextResponse.json({ orders: [],msg:"no orders" }, { status: 200 });
+			}
 		}
-
-		// Validate optional table ID
-		const { searchParams } = new URL(req.url);
-		const tableId = searchParams.get("tableId");
-
-		if (tableId && !mongoose.isValidObjectId(tableId)) {
-			return errorResponse("Invalid table ID", 400);
+		if (userId && sessionToken) {
+			await transferGuestOrdersToUser(sessionToken, userId);
 		}
-
+		const ownerFilter = userId
+			? { userId }
+			: { guestToken: sessionToken! };
 		const filter = {
-			guestToken: sessionToken,
+			...ownerFilter,
 			status: {
 				$in: ["pending", "accepted", "preparing", "ready"],
 			},
-			...(tableId && {
-				tableId: new mongoose.Types.ObjectId(tableId),
-			}),
 		};
 
 		// Fetch orders

@@ -1,8 +1,6 @@
 import ActiveOrderCard from "@/components/order/ActiveOrderCard";
-import { RootState } from "@/store/store";
 import { IndianRupee, Loader2 } from "lucide-react";
 import { Dispatch, useEffect } from "react";
-import { useSelector } from "react-redux";
 import Button from "@/components/Button";
 import { useActiveOrders } from "@/store/features/order/query";
 
@@ -19,13 +17,12 @@ export default function ActiveOrders({
 	onCallWaiter,
 	setAcitveOrdersCount,
 }: Props) {
-	const tableId = useSelector((state: RootState) => state.table.id);
 	const {
 		data: activeOrders = [],
 		isPending,
 		isError,
 		refetch,
-	} = useActiveOrders(tableId);
+	} = useActiveOrders();
 
 	useEffect(() => {
 		setAcitveOrdersCount(activeOrders.length);
@@ -96,7 +93,7 @@ export default function ActiveOrders({
 				</div>
 			) : (
 				<div className="pb-20 pt-8 text-center text-muted-text">
-					No active order
+					No active orders found.
 				</div>
 			)}
 		</div>

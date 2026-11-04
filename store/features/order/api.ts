@@ -18,7 +18,7 @@ type ActiveOrderItem = {
 
 export type ActiveOrderType = {
 	_id: string;
-	tableNumber: string;
+	tableNumber: number;
 	branch: string;
 	activeCount: number;
 	subtotal: number;
@@ -26,15 +26,8 @@ export type ActiveOrderType = {
 	status: string;
 };
 
-export async function getActiveOrders(
-	tableId?: string | null,
-): Promise<ActiveOrderType[]> {
-	const res = await axios.get<{ orders: ActiveOrderType[] }>("/api/orders", {
-		params: {
-			status: "pending",
-			...(tableId ? { tableId } : {}),
-		},
-	});
+export async function getActiveOrders(): Promise<ActiveOrderType[]> {
+	const res = await axios.get<{ orders: ActiveOrderType[] }>("/api/orders");
 
 	return res.data.orders;
 }

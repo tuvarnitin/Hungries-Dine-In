@@ -4,7 +4,7 @@ import EditProfileButton from "./EditProfileButton";
 interface ProfileCardProps {
 	name: string;
 	email: string;
-	phone: string;
+	phone?: string;
 	image: string;
 	onEdit?: () => void;
 }
@@ -31,7 +31,9 @@ export default function ProfileCard({
 						{email}
 					</p>
 
-					<p className="text-xs text-muted-text font-medium">{phone}</p>
+					{phone && (
+						<p className="text-xs text-muted-text font-medium">{phone}</p>
+					)}
 				</div>
 			</div>
 
