@@ -56,6 +56,9 @@ export const authOptions: NextAuthOptions = {
 	},
 	callbacks: {
 		async jwt({ token, user, account }) {
+			if (account?.provider) {
+				token.authProvider = account.provider;
+			}
 			if (account?.provider === "credentials" && user?.id) {
 				token.userId = user.id;
 			}
@@ -64,6 +67,9 @@ export const authOptions: NextAuthOptions = {
 		async session({ session, token }) {
 			if (session.user && token.userId) {
 				session.user.id = token.userId;
+			}
+			if (session.user && token.authProvider) {
+				session.user.authProvider = token.authProvider;
 			}
 			return session;
 		},

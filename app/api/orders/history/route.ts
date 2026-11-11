@@ -2,7 +2,8 @@ import { connectDB } from "@/lib/db";
 import { GUEST_SESSION_COOKIE } from "@/lib/guest-session";
 import { getAuthenticatedUserId } from "@/lib/authenticated-user";
 import { transferGuestOrdersToUser } from "@/lib/transfer-guest-orders";
-import Order, { OrderItem } from "@/models/orderModel";
+import Food from "@/models/foodModel";
+import Order, { type OrderItem } from "@/models/orderModel";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -32,9 +33,22 @@ export async function GET() {
 		};
 
 		const orders = await Order.find(filter)
-			.populate("items.foodId")
 			.sort({ createdAt: -1 })
 			.lean();
+
+		const foodIds = [
+			...new Set(
+				orders.flatMap((order) =>
+					order.items.map((item: OrderItem) => item.foodId.toString()),
+				),
+			),
+		];
+		const foods = await Food.find({ _id: { $in: foodIds } })
+			.select("img tags desc category")
+			.lean();
+		const foodsById = new Map(
+			foods.map((food) => [food._id.toString(), food]),
+		);
 
 		const formatedOrders = orders.map((order) => ({
 			id: order._id,
@@ -43,11 +57,25 @@ export async function GET() {
 			restaurant: "Hungries Dine • Main Hall",
 			total: Math.ceil(order.subtotal),
 			rating: 5,
-			items: order.items.map((item:OrderItem) => ({
-				name: `${item.name} ${item.quantity > 1 && `(x${item.quantity})`}`,
-				id: item.foodId,
-			})),
-            status:order.status
+			items: order.items.flatMap((item: OrderItem) => {
+				const food = foodsById.get(item.foodId.toString());
+				if (!food) return [];
+
+				return [
+					{
+						foodId: item.foodId.toString(),
+						img: food.img,
+						tags: food.tags ?? [],
+						name: item.name,
+						displayName: `${item.name}${item.quantity > 1 ? ` (x${item.quantity})` : ""}`,
+						price: item.price,
+						quantity: item.quantity,
+						desc: food.desc ?? "",
+						category: food.category ?? "",
+					},
+				];
+			}),
+			status: order.status,
 		}));
 
 		return NextResponse.json(

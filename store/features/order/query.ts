@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { getActiveOrders, getOrderHistory } from "./api";
 
-const ORDER_STALE_TIME = 1 * 60 * 1000;
+const ORDER_STALE_TIME = 3 * 60 * 1000;
 
 export const orderQueryKeys = {
 	active: ["orders", "active"] as const,

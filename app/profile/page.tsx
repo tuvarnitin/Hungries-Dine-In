@@ -38,7 +38,9 @@ export default function ProfileScreen() {
 						isOpen={showLogin}
 						onGoogleLogin={() => {
 							setShowLogin(false);
-							void signIn("google", { callbackUrl: "/profile" });
+							void signIn("google", {
+								callbackUrl: "/auth/google/complete?returnTo=%2Fprofile",
+							});
 						}}
 					/>
 				</>

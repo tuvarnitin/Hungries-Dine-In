@@ -51,7 +51,7 @@ export default function ReceiptModal({
 							key={`${order.id}-${index}`}
 							className="flex items-center justify-between gap-2 text-sm text-dark-text"
 						>
-							<span>{item.name}</span>
+							<span>{item.displayName}</span>
 							{order.status === "cancelled" ? (
 								<X
 									size={16}

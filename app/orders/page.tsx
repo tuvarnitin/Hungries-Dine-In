@@ -10,11 +10,13 @@ import ReceiptModal from "@/components/order/ReceiptModal";
 import OrderTabs from "@/components/order/OrderTab";
 import ActiveOrders from "@/components/order/ActiveOrders";
 import OrderHistoryList from "@/components/order/OrderHistoryList";
-import { orderHistoryData } from "@/data/orders";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { addItemsToCart } from "@/store/features/cart/cartSlice";
 
 export default function OrdersPage() {
 	const router = useRouter();
+	const dispatch = useDispatch();
 
 	const [activeTab, setActiveTab] = useState<Tab>("active");
 
@@ -53,8 +55,10 @@ export default function OrdersPage() {
 	};
 
 	const handleReorder = (order: OrderHistory) => {
+		dispatch(addItemsToCart(order.items));
 		closeReceiptModal();
-		showToast(`Re-ordering items from ${order.id}`);
+		showToast("Items added to your cart.");
+		router.push("/cart");
 	};
 
 	return (

@@ -1,4 +1,5 @@
 import { OrderHistory } from "@/types/order";
+import type { OrderStatus } from "@/models/orderModel";
 import axios from "axios";
 
 type ActiveOrderItem = {
@@ -23,7 +24,7 @@ export type ActiveOrderType = {
 	activeCount: number;
 	subtotal: number;
 	items: ActiveOrderItem[];
-	status: string;
+	status: OrderStatus;
 };
 
 export async function getActiveOrders(): Promise<ActiveOrderType[]> {

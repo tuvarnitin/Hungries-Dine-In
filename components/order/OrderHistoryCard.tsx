@@ -41,7 +41,7 @@ export default function OrderHistoryCard({
 						</h4>
 
 						<p className="text-xs text-[#7A7067] mt-0.5 line-clamp-1">
-							{order.items.map(({ name }) => `${name}, `)}
+							{order.items.map(({ displayName }) => `${displayName}, `)}
 						</p>
 
 						<div className="flex items-center space-x-1 text-amber-500 pt-1">

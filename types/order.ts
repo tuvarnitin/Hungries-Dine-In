@@ -1,5 +1,4 @@
-import { ICartItem } from "@/types/cart";
-
+import type { ICartItem } from "@/types/cart";
 
 export type OrderHistory = {
 	id: string;
@@ -8,9 +7,12 @@ export type OrderHistory = {
 	restaurant?: string;
 	total: string;
 	rating: number;
-	items: {
-		name: string;
-	}[];
+	items: (Pick<
+		ICartItem,
+		"foodId" | "img" | "tags" | "name" | "price" | "quantity" | "desc" | "category"
+	> & {
+		displayName: string;
+	})[];
 	status: string
 };
 

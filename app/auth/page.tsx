@@ -11,7 +11,11 @@ export default function AuthPage() {
 		<LoginModal
 			isOpen
 			onClose={() => router.replace("/")}
-			onGoogleLogin={() => void signIn("google", { callbackUrl: "/" })}
+			onGoogleLogin={() =>
+				void signIn("google", {
+					callbackUrl: "/auth/google/complete?returnTo=%2F",
+				})
+			}
 		/>
 	);
 }

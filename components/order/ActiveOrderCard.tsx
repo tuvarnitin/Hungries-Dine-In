@@ -1,6 +1,17 @@
 import Image from "next/image";
 import { ActiveOrderType } from "./ActiveOrders";
-import { IndianRupee } from "lucide-react";
+import { Check, IndianRupee, X } from "lucide-react";
+import type { OrderStatus } from "@/models/orderModel";
+
+const ORDER_STEPS = ["Processing", "Preparing", "Ready", "Delivered"] as const;
+
+const STATUS_STEP: Partial<Record<OrderStatus, number>> = {
+	pending: 0,
+	accepted: 0,
+	preparing: 1,
+	ready: 2,
+	delivered: 3,
+};
 
 type Props = {
 	activeOrder: ActiveOrderType;
@@ -13,6 +24,9 @@ const StatusColor: Record<string, string> = {
 };
 
 export default function ActiveOrderCard({ activeOrder, subtotal }: Props) {
+	const currentStep = STATUS_STEP[activeOrder.status];
+	const isTerminal = activeOrder.status === "cancelled" || activeOrder.status === "rejected";
+
 	return (
 		<div className="">
 			<div className="bg-white rounded-3xl p-5 shadow-sm border border-muted-text/15">
@@ -79,6 +93,72 @@ export default function ActiveOrderCard({ activeOrder, subtotal }: Props) {
 						/>
 						<span className="font-extrabold text-red text-lg">{subtotal}</span>
 					</div>
+				</div>
+				<div className="mt-5 border-t border-muted-text/15 pt-4">
+					{isTerminal ? (
+						<div
+							role="status"
+							className="flex items-center justify-center gap-2 text-sm font-semibold text-red-700"
+						>
+							<X size={18} />
+							Order {activeOrder.status}
+						</div>
+					) : (
+						<>
+							<ol
+								aria-label={`Order progress: ${activeOrder.status}`}
+								className="flex items-start"
+							>
+								{ORDER_STEPS.map((step, index) => {
+									const isComplete = currentStep !== undefined && index < currentStep;
+									const isCurrent = currentStep === index;
+
+									return (
+										<li
+											key={step}
+											aria-current={isCurrent ? "step" : undefined}
+											className="relative flex flex-1 flex-col items-center text-center"
+										>
+											{index > 0 && (
+												<span
+													aria-hidden="true"
+													className={`absolute right-1/2 top-3 h-1 w-full ${
+														currentStep !== undefined && index <= currentStep
+															? "bg-green-600"
+															: "bg-gray-200"
+													}`}
+												/>
+											)}
+											<span
+												className={`relative z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 ${
+													isComplete || isCurrent
+														? "border-green-600 bg-green-600 text-white"
+														: "border-gray-300 bg-white text-gray-400"
+												}`}
+											>
+												{isComplete ? (
+													<Check size={14} aria-hidden="true" />
+												) : (
+													<span className="text-[10px] font-bold">
+														{index + 1}
+													</span>
+												)}
+											</span>
+											<span
+												className={`mt-2 text-[9px] leading-3 sm:text-[10px] ${
+													isComplete || isCurrent
+														? "font-semibold text-green-700"
+														: "text-muted-text"
+												}`}
+											>
+												{step}
+											</span>
+										</li>
+									);
+								})}
+							</ol>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

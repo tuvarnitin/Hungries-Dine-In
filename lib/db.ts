@@ -25,6 +25,7 @@ export const connectDB = async() => {
     try {
         cached.conn = await cached.promise;
     } catch (error) {
+        console.log("Monoose error")
         throw error
     }
     return cached.conn
