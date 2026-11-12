@@ -31,7 +31,6 @@ type CreateOrderBody = {
 };
 
 function errorResponse(message: string, status: number) {
-	console.log(message)
 	return NextResponse.json({ success: false, message }, { status });
 }
 
@@ -80,7 +79,6 @@ async function resolveGuestSession(token?: string) {
 				isNew: false,
 			};
 		}
-		console.log("Result is false")
 	}
 
 	const session = await createGuestSession();

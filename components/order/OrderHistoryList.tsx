@@ -3,6 +3,7 @@ import OrderHistoryCard from "@/components/order/OrderHistoryCard";
 import { Dispatch, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { useOrderHistory } from "@/store/features/order/query";
+import { notifyError } from "@/lib/toast-notifications";
 
 type Props = {
 	selectedItems: Record<string, boolean>;
@@ -19,6 +20,7 @@ export default function OrderHistoryList({
 }: Props) {
 	const {
 		data: orders = [],
+		error,
 		isPending,
 		isError,
 		refetch,
@@ -28,13 +30,18 @@ export default function OrderHistoryList({
 		setOrderHistoryCount(orders.length);
 	}, [orders, setOrderHistoryCount]);
 
+	useEffect(() => {
+		if (isError) {
+			notifyError(error, "Couldn't load order history.");
+		}
+	}, [error, isError]);
+
 	if (isError) {
 		return (
 			<div
 				className="bg-white rounded-3xl p-5 shadow-sm border border-cream min-h-50 text-center text-muted-text"
 				role="alert"
 			>
-				<p>Couldn&apos;t load order history.</p>
 				<button type="button" className="mt-2 underline" onClick={() => refetch()}>
 					Try again
 				</button>

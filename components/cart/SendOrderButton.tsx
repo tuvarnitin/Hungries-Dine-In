@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { orderQueryKeys } from "@/store/features/order/query";
+import { notifyError } from "@/lib/toast-notifications";
+import { toast } from "react-toastify";
 
 interface SendOrderButtonProps {
 	totalDue: string;
@@ -27,13 +29,13 @@ export default function SendOrderButton({
 	const queryClient = useQueryClient();
 
 	const [isVerifying, setIsVerifying] = useState(false);
-	const [isValidTable, setIsValidTable] = useState(false);
+	const [verifiedTableId, setVerifiedTableId] = useState<string | null>(null);
 	const [internalLoading, setInternalLoading] = useState(false);
-	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
 	const tableId = useSelector((state: RootState) => state.table.id);
 	const items = useSelector((state: RootState) => state.cart.items);
 
+	const isValidTable = tableId !== null && verifiedTableId === tableId;
 	const isLoading = externalLoading || internalLoading;
 	const isCartEmpty = !items || items.length === 0;
 
@@ -42,21 +44,21 @@ export default function SendOrderButton({
 		let isMounted = true;
 
 		if (!tableId) {
-			setIsValidTable(false);
 			return;
 		}
 
 		const verifyTable = async () => {
 			setIsVerifying(true);
 			try {
-				const res = await fetch(`/api/table/${tableId}`);
+				await axios.get(`/api/table/${tableId}`);
 				if (isMounted) {
-					setIsValidTable(res.ok);
+					setVerifiedTableId(tableId);
 				}
 			} catch (error) {
 				console.error("Error verifying table:", error);
 				if (isMounted) {
-					setIsValidTable(false);
+					setVerifiedTableId(null);
+					notifyError(error, "Unable to verify this table. Please try again.");
 				}
 			} finally {
 				if (isMounted) {
@@ -78,7 +80,6 @@ export default function SendOrderButton({
 		if (isDisabled || isLoading) return;
 
 		setInternalLoading(true);
-		setErrorMessage(null);
 
 		try {
 			const orderPayload = {
@@ -89,27 +90,21 @@ export default function SendOrderButton({
 				})),
 			};
 
-			const res = await axios.post("/api/orders", orderPayload);
-			console.log(res)
+			await axios.post("/api/orders", orderPayload);
 
-			if (res.status === 200 || res.status === 201) {
-				dispatch(clearCart());
-				await queryClient.invalidateQueries({
-					queryKey: orderQueryKeys.active,
-				});
-				await queryClient.invalidateQueries({
-					queryKey: orderQueryKeys.history,
-				});
-				onClick?.();
-				router.push("/orders");
-			}
-		} catch (error: any) {
+			dispatch(clearCart());
+			await queryClient.invalidateQueries({
+				queryKey: orderQueryKeys.active,
+			});
+			await queryClient.invalidateQueries({
+				queryKey: orderQueryKeys.history,
+			});
+			toast.success("Order sent to the kitchen.");
+			onClick?.();
+			router.push("/orders");
+		} catch (error: unknown) {
 			console.error("Failed to place order:", error);
-			const msg =
-				error.response?.data?.message ||
-				error.response?.data?.msg ||
-				"Failed to place order. Please try again.";
-			setErrorMessage(msg);
+			notifyError(error, "Failed to place order. Please try again.");
 		} finally {
 			setInternalLoading(false);
 		}
@@ -135,12 +130,6 @@ export default function SendOrderButton({
 					? "Invalid Table • Rescan QR"
 					: `Send Order to Kitchen • $${totalDue}`}
 			</Button>
-
-			{errorMessage && (
-				<p className="text-xs text-center text-red font-medium">
-					{errorMessage}
-				</p>
-			)}
 		</div>
 	);
 }

@@ -11,6 +11,9 @@ import { Lock, Mail, UserRound } from "lucide-react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { notifyError } from "@/lib/toast-notifications";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -30,7 +33,6 @@ export default function LoginModal({
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const [error, setError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
@@ -54,29 +56,27 @@ export default function LoginModal({
 
 	const handleModeChange = (nextMode: AuthMode) => {
 		setMode(nextMode);
-		setError("");
 	};
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setError("");
 
 		const normalizedEmail = normalizeEmail(email);
 		if (!normalizedEmail) {
-			setError("Enter a valid email address.");
+			toast.error("Enter a valid email address.");
 			return;
 		}
 		if (!isValidPassword(password)) {
-			setError("Password must be more than 8 characters.");
+			toast.error("Password must be between 8 and 128 characters.");
 			return;
 		}
 		if (mode === "register") {
 			if (!name.trim() || name.trim().length > 80) {
-				setError("Name must be of atleast 4 characters.");
+				toast.error("Enter a name between 1 and 80 characters.");
 				return;
 			}
 			if (password !== confirmPassword) {
-				setError("Passwords do not match.");
+				toast.error("Passwords do not match.");
 				return;
 			}
 		}
@@ -85,29 +85,18 @@ export default function LoginModal({
 		let guestOrderTransferPending = false;
 		try {
 			if (mode === "register") {
-				const response = await fetch("/api/auth/register", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						name: name.trim(),
-						email: normalizedEmail,
-						password,
-					}),
-				});
-				const result = (await response.json()) as {
-					error?: string;
+				const { data: result } = await axios.post<{
 					guestOrdersTransferred?: boolean;
-				};
-
-				if (!response.ok) {
-					setError(result.error ?? "Unable to create your account.");
-					return;
-				}
+				}>("/api/auth/register", {
+					name: name.trim(),
+					email: normalizedEmail,
+					password,
+				});
 
 				guestOrderTransferPending =
 					result.guestOrdersTransferred === false;
 				if (guestOrderTransferPending) {
-					setError(
+					toast.warning(
 						"Account created, but guest order transfer is pending. Refresh your orders to retry.",
 					);
 				}
@@ -120,7 +109,7 @@ export default function LoginModal({
 			});
 
 			if (!result?.ok) {
-				setError(
+				toast.error(
 					mode === "register"
 						? "Account created, but sign-in failed. Please log in."
 						: "Invalid email or password.",
@@ -129,9 +118,14 @@ export default function LoginModal({
 				return;
 			}
 
+			if (!guestOrderTransferPending) {
+				toast.success(
+					mode === "register" ? "Account created successfully." : "Logged in successfully.",
+				);
+			}
 			if (mode === "login" || !guestOrderTransferPending) onClose();
-		} catch {
-			setError("Unable to complete sign-in. Please try again.");
+		} catch (error: unknown) {
+			notifyError(error, "Unable to complete sign-in. Please try again.");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -259,11 +253,6 @@ export default function LoginModal({
 						</>
 					)}
 
-					{error && (
-						<p role="alert" className="text-[12px] text-red-600">
-							{error}
-						</p>
-					)}
 					<Button
 						type="submit"
 						variant="primary"

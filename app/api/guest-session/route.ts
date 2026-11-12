@@ -51,7 +51,6 @@ export async function POST() {
 
 		return response;
 	} catch (error) {
-		console.log("Guest session creation failed", error);
 		return NextResponse.json(
 			{
 				mgs: "Unable to create guest session",

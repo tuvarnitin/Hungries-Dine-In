@@ -4,7 +4,6 @@ import { useState } from "react";
 import { OrderHistory, SelectedHistoryItems } from "@/types/order";
 import { Tab } from "@/types/shared";
 
-import Toast from "@/components/Toast";
 import CallWaiterModal from "@/components/order/CallWaiterModal";
 import ReceiptModal from "@/components/order/ReceiptModal";
 import OrderTabs from "@/components/order/OrderTab";
@@ -13,6 +12,7 @@ import OrderHistoryList from "@/components/order/OrderHistoryList";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { addItemsToCart } from "@/store/features/cart/cartSlice";
+import { toast } from "react-toastify";
 
 export default function OrdersPage() {
 	const router = useRouter();
@@ -28,15 +28,6 @@ export default function OrdersPage() {
 	const [isReceiptOpen, setIsReceiptOpen] = useState(false);
 	const [acitveOrdersCount, setActiveOrdersCount] = useState(0);
 	const [orderHistoryCount, setOrderHistoryCount] = useState(0);
-	const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-	const showToast = (message: string) => {
-		setToastMessage(message);
-		setTimeout(() => {
-			setToastMessage(null);
-		}, 3000);
-	};
-
 	const toggleHistorySelection = (id: string) => {
 		setSelectedHistoryItems((prev) => ({
 			...prev,
@@ -57,14 +48,12 @@ export default function OrdersPage() {
 	const handleReorder = (order: OrderHistory) => {
 		dispatch(addItemsToCart(order.items));
 		closeReceiptModal();
-		showToast("Items added to your cart.");
+		toast.success("Items added to your cart.");
 		router.push("/cart");
 	};
 
 	return (
 		<div className="antialiased flex flex-col gap-4 items-center pb-36 relative select-none">
-			<Toast message={toastMessage} />
-
 			<CallWaiterModal
 				open={isCallWaiterOpen}
 				onClose={() => setIsCallWaiterOpen(false)}
@@ -101,15 +90,6 @@ export default function OrdersPage() {
 					/>
 				)}
 			</main>
-			{/* <OrderActions
-				onReorder={() =>
-					showToast("Selected historical items added back to active cart!")
-				}
-				onGoToActive={() => {
-					setActiveTab("active");
-					showToast("Switched to Active Table Session");
-				}}
-			/> */}
 		</div>
 	);
 }

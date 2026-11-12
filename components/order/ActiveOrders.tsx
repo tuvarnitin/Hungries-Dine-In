@@ -3,6 +3,7 @@ import { IndianRupee, Loader2 } from "lucide-react";
 import { Dispatch, useEffect } from "react";
 import Button from "@/components/Button";
 import { useActiveOrders } from "@/store/features/order/query";
+import { notifyError } from "@/lib/toast-notifications";
 
 export type { ActiveOrderType } from "@/store/features/order/api";
 
@@ -19,6 +20,7 @@ export default function ActiveOrders({
 }: Props) {
 	const {
 		data: activeOrders = [],
+		error,
 		isPending,
 		isError,
 		refetch,
@@ -28,6 +30,12 @@ export default function ActiveOrders({
 		setAcitveOrdersCount(activeOrders.length);
 	}, [activeOrders, setAcitveOrdersCount]);
 
+	useEffect(() => {
+		if (isError) {
+			notifyError(error, "Couldn't load active orders.");
+		}
+	}, [error, isError]);
+
 	const activeOrdersTotalAmount = Math.ceil(
 		activeOrders.reduce((amount, order) => amount + order.subtotal, 0),
 	);
@@ -35,7 +43,6 @@ export default function ActiveOrders({
 	if (isError) {
 		return (
 			<div className="mt-10 text-center text-muted-text" role="alert">
-				<p>Couldn&apos;t load active orders.</p>
 				<button type="button" className="mt-2 underline" onClick={() => refetch()}>
 					Try again
 				</button>

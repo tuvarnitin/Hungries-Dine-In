@@ -4,15 +4,24 @@ import { connectDB } from "@/lib/db";
 
 export async function POST(req: Request) {
 	try {
-		const { img, tags, name, rating, estPreparationTime, price, desc }: IFood =
-			await req.json();
+		const {
+			img,
+			tags,
+			name,
+			rating,
+			estPreparationTime,
+			price,
+			desc,
+			category,
+		}: IFood = await req.json();
 		if (
 			!img ||
 			!tags.length ||
 			!name ||
 			!estPreparationTime ||
 			!price ||
-			!desc
+			!desc || 
+			!category
 		) {
 			return NextResponse.json(
 				{
@@ -44,16 +53,16 @@ export async function POST(req: Request) {
 			estPreparationTime,
 			price,
 			desc,
+			category:category.toLowerCase()
 		});
 		return NextResponse.json({ food }, { status: 201 });
 	} catch (error: any) {
-		console.log(error);
 		return NextResponse.json({ msg: error.message });
 	}
 }
 
 export async function GET(req: Request) {
-	try {
+	try { 
 		await connectDB();
 		const searchParams = new URLSearchParams(req.url.split("?")[1]);
 
@@ -67,7 +76,7 @@ export async function GET(req: Request) {
 		let filter: Record<string, unknown> = { isAvailable: true };
 
 		if (category) {
-			filter.category = category;
+			filter.category = category.toLowerCase();
 		}
 
 		const foods = await Food.find(filter)
@@ -75,7 +84,6 @@ export async function GET(req: Request) {
 			.skip((currPage - 1) * currLimit)
 			.limit(currLimit + 1);
 
-		console.log(foods.length);
 
 		const hasMore = foods.length > currLimit;
 
@@ -87,7 +95,6 @@ export async function GET(req: Request) {
 
 		return NextResponse.json({ foods, hasMore, nextPage }, { status: 200 });
 	} catch (error: any) {
-		console.log(error);
 		return NextResponse.json(
 			{ msg: error.message || "Error while fetching foods.", error },
 			{ status: 500 },

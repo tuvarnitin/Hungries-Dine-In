@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import FoodCardSkeleton from "./FoodCardSkeleton";
 import NoResults from "../home/NoResults";
 import { useFood } from "@/store/features/food/query";
+import { notifyError } from "@/lib/toast-notifications";
 
 const FoodList = ({
 	title,
@@ -18,8 +19,22 @@ const FoodList = ({
 		...(selectedFilter !== "All" ? { category: selectedFilter } : {}),
 	};
 
-	const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
-		useFood(params.category);
+	const {
+		data,
+		isPending,
+		hasNextPage,
+		fetchNextPage,
+		isFetchingNextPage,
+		isError,
+		error,
+		refetch,
+	} = useFood(params.category);
+
+	useEffect(() => {
+		if (isError) {
+			notifyError(error, "Unable to load menu items. Please try again.");
+		}
+	}, [error, isError]);
 
 	useEffect(() => {
 		const container = foodListContainerRef.current;
@@ -31,7 +46,6 @@ const FoodList = ({
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (entries[0]?.isIntersecting) {
-					console.log("Intersected");
 					fetchNextPage();
 				}
 			},
@@ -47,6 +61,21 @@ const FoodList = ({
 	}, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
 	const foods = data?.pages.flatMap((page) => page.foods) ?? [];
+
+	if (isError && foods.length === 0) {
+		return (
+			<div className="py-8 text-center text-muted-text">
+				<p>Unable to load menu items.</p>
+				<button
+					type="button"
+					className="mt-2 underline"
+					onClick={() => void refetch()}
+				>
+					Try again
+				</button>
+			</div>
+		);
+	}
 
 	if (isPending) {
 		return (

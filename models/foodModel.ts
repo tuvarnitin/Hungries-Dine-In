@@ -9,7 +9,7 @@ export interface IFood extends Document {
 	price: number;
 	desc: string;
 	isAvailable: boolean;
-	category?: string;
+	category: string;
 }
 
 const foodSchema = new Schema<IFood>(

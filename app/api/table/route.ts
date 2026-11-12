@@ -1,5 +1,5 @@
-import { connectDB } from "../../../lib/db";
-import Table from "../../../models/tableModel";
+import { connectDB } from "@/lib/db";
+import Table from "@/models/tableModel";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -28,7 +28,6 @@ export async function POST(req: Request) {
 			{ status: 201 },
 		);
 	} catch (error) {
-		console.log(error);
 		return NextResponse.json(
 			{ msg: "Error creating new table", error },
 			{ status: 500 },

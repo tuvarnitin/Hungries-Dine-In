@@ -5,8 +5,10 @@ import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { notifyError } from "@/lib/toast-notifications";
+import { toast } from "react-toastify";
 
-type RegistrationState = "checking" | "confirm" | "saving" | "error";
+type RegistrationState = "checking" | "confirm" | "saving" | "check-error";
 
 function getReturnTo() {
 	const returnTo = new URLSearchParams(window.location.search).get("returnTo");
@@ -19,7 +21,7 @@ export default function GoogleRegistrationPage() {
 	const router = useRouter();
 	const { status: sessionStatus } = useSession();
 	const [state, setState] = useState<RegistrationState>("checking");
-	const [message, setMessage] = useState("");
+	const [checkAttempt, setCheckAttempt] = useState(0);
 
 	useEffect(() => {
 		if (sessionStatus === "loading") return;
@@ -42,14 +44,8 @@ export default function GoogleRegistrationPage() {
 				}
 			} catch (error: unknown) {
 				if (cancelled) return;
-				setMessage(
-					axios.isAxiosError<{ error?: string }>(error)
-						? error.response?.data?.error ?? "Unable to check your account."
-						: error instanceof Error
-							? error.message
-							: "Unable to check your account.",
-				);
-				setState("error");
+				notifyError(error, "Unable to check your account.");
+				setState("check-error");
 			}
 		};
 		void checkAccount();
@@ -57,37 +53,42 @@ export default function GoogleRegistrationPage() {
 		return () => {
 			cancelled = true;
 		};
-	}, [router, sessionStatus]);
+	}, [checkAttempt, router, sessionStatus]);
 
 	const registerAccount = async () => {
 		setState("saving");
-		setMessage("");
 
 		try {
-			const { data } = await axios.post<{ registered: boolean }>(
+			const { data } = await axios.post<{
+				registered: boolean;
+				alreadyRegistered?: boolean;
+			}>(
 				"/api/auth/google-registration",
 			);
 			if (!data.registered) {
 				throw new Error("Unable to register your account.");
 			}
 
+			if (data.alreadyRegistered) {
+				toast.info("This Google account is already registered.");
+			} else {
+				toast.success("Google account registered successfully.");
+			}
 			router.replace(getReturnTo());
 		} catch (error) {
-			setMessage(
-				axios.isAxiosError<{ error?: string }>(error)
-					? error.response?.data?.error ?? "Unable to register your account."
-					: error instanceof Error
-						? error.message
-						: "Unable to register your account.",
-			);
-			setState("error");
+			notifyError(error, "Unable to register your account.");
+			setState("confirm");
 		}
 	};
 
 	const declineRegistration = async () => {
 		const returnTo = getReturnTo();
-		await signOut({ redirect: false });
-		router.replace(returnTo);
+		try {
+			await signOut({ redirect: false });
+			router.replace(returnTo);
+		} catch (error) {
+			notifyError(error, "Unable to cancel Google sign-in.");
+		}
 	};
 
 	return (
@@ -95,24 +96,36 @@ export default function GoogleRegistrationPage() {
 			<h1 className="text-xl font-bold text-dark-text">
 				{state === "checking"
 					? "Checking your account..."
-					: "Create an account?"}
+					: state === "check-error"
+						? "Unable to check your account"
+						: "Create an account?"}
 			</h1>
 
 			{state === "checking" ? (
 				<p className="mt-3 text-sm text-muted-text">
 					Please wait while we check whether this Google account is registered.
 				</p>
+			) : state === "check-error" ? (
+				<>
+					<p className="mt-3 text-sm text-muted-text">
+						Please try checking your account again.
+					</p>
+					<Button
+						className="mt-6 w-full"
+						onClick={() => {
+							setState("checking");
+							setCheckAttempt((attempt) => attempt + 1);
+						}}
+					>
+						Try again
+					</Button>
+				</>
 			) : (
 				<>
 					<p className="mt-3 text-sm text-muted-text">
 						This Google account isn&apos;t registered yet. Would you like to
 						create an account with it?
 					</p>
-					{message && (
-						<p role="alert" className="mt-3 text-sm text-red-600">
-							{message}
-						</p>
-					)}
 					<div className="mt-6 grid grid-cols-2 gap-3">
 						<Button
 							variant="outline"

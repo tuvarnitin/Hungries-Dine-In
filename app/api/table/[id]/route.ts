@@ -8,7 +8,6 @@ export async function GET(
 	{ params }: { params: Promise<{ id: string }> },
 ) {
 	const { id } = await params;
-	console.log(await params);
 	try {
 		if (!id) {
 			return NextResponse.json(
@@ -41,7 +40,6 @@ export async function GET(
 			},
 		);
 	} catch (error) {
-		console.log(error);
 		return NextResponse.json(
 			{ msg: "Error fetching table", error },
 			{ status: 500 },

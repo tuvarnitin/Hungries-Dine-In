@@ -31,7 +31,6 @@ export async function findValidGuestSession(token: string | undefined) {
 		cookieStore.delete(GUEST_SESSION_COOKIE)
 		return null
 	};
-	console.log("Guest session ", guestSession)
 
 	return guestSession;
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { notifyError } from "@/lib/toast-notifications";
+import { toast } from "react-toastify";
 
 interface OTPVerificationProps {
     email: string;
@@ -20,8 +22,6 @@ export default function Otp({
     const [seconds, setSeconds] = useState(RESEND_TIME);
     const [isVerifying, setIsVerifying] = useState(false);
     const [isResending, setIsResending] = useState(false);
-    const [error, setError] = useState("");
-
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     // Resend countdown
@@ -43,7 +43,6 @@ export default function Otp({
         newOtp[index] = digit;
 
         setOtp(newOtp);
-        setError("");
 
         if (digit && index < OTP_LENGTH - 1) {
             inputRefs.current[index + 1]?.focus();
@@ -86,7 +85,6 @@ export default function Otp({
         });
 
         setOtp(newOtp);
-        setError("");
 
         const focusIndex = Math.min(pastedOtp.length, OTP_LENGTH - 1);
 
@@ -101,13 +99,11 @@ export default function Otp({
 
         try {
             setIsVerifying(true);
-            setError("");
 
             await onVerify(enteredOtp);
-        } catch (err) {
-            setError(
-                err instanceof Error ? err.message : "Invalid OTP. Please try again.",
-            );
+            toast.success("Email verified successfully.");
+        } catch (error: unknown) {
+            notifyError(error, "Invalid OTP. Please try again.");
         } finally {
             setIsVerifying(false);
         }
@@ -117,19 +113,15 @@ export default function Otp({
     const handleResend = async () => {
         try {
             setIsResending(true);
-            setError("");
 
             await onResend();
 
             setOtp(Array(OTP_LENGTH).fill(""));
             setSeconds(RESEND_TIME);
             inputRefs.current[0]?.focus();
-        } catch (err) {
-            setError(
-                err instanceof Error
-                    ? err.message
-                    : "Unable to resend OTP. Please try again.",
-            );
+            toast.success("Verification code sent.");
+        } catch (error: unknown) {
+            notifyError(error, "Unable to resend OTP. Please try again.");
         } finally {
             setIsResending(false);
         }
@@ -176,7 +168,7 @@ export default function Otp({
                         </h2>
 
                         <p className="mt-3 text-sm leading-6 text-[#71837A]">
-                            We've sent a 6-digit verification code to
+                            We&apos;ve sent a 6-digit verification code to
                         </p>
 
                         <p className="mt-1 text-sm font-semibold text-[#023320] break-all">
@@ -217,16 +209,6 @@ export default function Otp({
                         </p>
                     </div>
 
-                    {/* Error */}
-                    {error && (
-                        <p
-                            role="alert"
-                            className="mt-5 text-sm text-[#7F1100] text-center bg-[#7F1100]/5 rounded-xl px-3 py-2"
-                        >
-                            {error}
-                        </p>
-                    )}
-
                     {/* Verify Button */}
                     <button
                         type="button"
@@ -246,7 +228,7 @@ export default function Otp({
 
                     {/* Resend OTP */}
                     <div className="mt-7 text-center">
-                        <p className="text-sm text-[#71837A]">Didn't receive the code?</p>
+                        <p className="text-sm text-[#71837A]">Didn&apos;t receive the code?</p>
 
                         <button
                             type="button"

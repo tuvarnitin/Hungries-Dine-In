@@ -5,6 +5,9 @@ import BackButton from "@/components/BackButton";
 import { useDispatch } from "react-redux";
 import { addTable } from "@/store/features/table/tableSlice";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { notifyError } from "@/lib/toast-notifications";
+import { toast } from "react-toastify";
 
 export default function ScannerPage() {
 	const [pause, setPause] = useState(false);
@@ -13,23 +16,28 @@ export default function ScannerPage() {
 
 	const handleScan = async (data: string) => {
 		setPause(true);
-		const tableId = data.split("table/")[1];
+		const tableId = data.split("table/")[1]?.split(/[?#]/)[0];
+		if (!tableId) {
+			notifyError(new Error("QR code does not contain a table ID."), "Invalid table QR code.");
+			setPause(false);
+			return;
+		}
+
 		try {
-			const fetchTable = async () => {
-				const res = await fetch(`/api/table/${tableId}`);
-				const data = await res.json();
-				console.log(data)
-				dispatch(
-					addTable({ tableNumber: data?.table?.tableNumber, saveAt: Date.now(),id:data?.table?.id }),
-				);
-			};
-			fetchTable();
-		} catch (error) {
-			console.log(error);
-			alert(JSON.stringify(error))
+			const { data: response } = await axios.get(`/api/table/${tableId}`);
+			dispatch(
+				addTable({
+					tableNumber: response.table.tableNumber,
+					saveAt: Date.now(),
+					id: response.table.id,
+				}),
+			);
+			toast.success(`Table ${response.table.tableNumber} selected.`);
+			router.replace("/");
+		} catch (error: unknown) {
+			notifyError(error, "Unable to load the table from this QR code.");
 		} finally {
 			setPause(false);
-			router.replace("/");
 		}
 	};
 
@@ -64,9 +72,7 @@ export default function ScannerPage() {
 				onScan={(detectedCodes) => {
 					handleScan(detectedCodes[0].rawValue);
 				}}
-				onError={(error) => {
-					console.log(`onError: ${error}'`);
-				}}
+				onError={(error) => notifyError(error, "Unable to access the camera.")}
 				styles={{
 					container: { borderRadius: 20 },
 					video: { width: "250px", height: "250px", borderRadius: 20 },
