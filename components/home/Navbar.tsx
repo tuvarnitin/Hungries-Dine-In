@@ -31,7 +31,9 @@ const Navbar = () => {
 					) : (
 						<div>
 							<p className="text-[10px] text-primary ml-">YOUR TABLE</p>
-							<h1 className="text-sm font-medium text-muted-text">No table scaned</h1>
+							<h1 className="text-sm font-medium text-muted-text">
+								No table scaned
+							</h1>
 						</div>
 					)}
 				</div>
@@ -45,7 +47,11 @@ const Navbar = () => {
 					<h1 className="text-sm">Call Chef</h1>
 				</button>
 			) : (
-				<button onClick={()=> router.push("/scanner")}>
+				<button
+					onClick={() => router.push("/scanner")}
+					aria-label="Scan QR code"
+					title="Scan QR code"
+				>
 					<QrCode className="animate-pulse" />
 				</button>
 			)}
